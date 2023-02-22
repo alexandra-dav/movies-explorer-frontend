@@ -1,0 +1,23 @@
+.footer {    
+    display: block;
+    justify-items: center;
+    color: rgba(139, 139, 139, 1);
+    margin: 79px 0 0 0;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 13px;
+    line-height: 22px;
+}
+
+@media screen  and (max-width: 425px) {
+  .footer__content {
+    font-size: 12px;
+  }
+}
+
+/* 
+@media screen and (max-width: 320px) {
+    .footer {
+        margin-left: 19px;
+    }
+} */

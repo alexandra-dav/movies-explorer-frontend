@@ -1,0 +1,9 @@
+.landing__logo{
+  grid-area: logo;
+  max-height: 152px;
+  max-width: 155px;
+  border-radius: 0px;
+  margin: 0;
+  padding: 0;
+  justify-self: end;
+}
