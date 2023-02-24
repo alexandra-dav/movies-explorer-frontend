@@ -5,6 +5,14 @@
   font-weight: 400;
   line-height: 58px;
   text-align: left;
-  margin: 0;
+  margin: 75px 0 0 70px;
   padding: 0;
+}
+@media screen and (max-width: 769px) {
+  .landing__title {
+    margin: 48px auto 0 auto;
+    font-size: 40px;
+    text-align: center;
+    line-height: 50px;
+  }    
 }

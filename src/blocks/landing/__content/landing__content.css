@@ -1,10 +1,19 @@
 .landing__content {
+  position: relative;
   display: grid;
   justify-content: space-between;
-  padding: 75px 70px;
   grid-template-columns: 70% 30%;
+  padding: 0;
+  margin: 0;
   grid-template-areas: 
   "title logo"
   "subtitle logo"
   "button button";
+}
+@media screen and (max-width: 769px) {
+  .landing__content {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+  }    
 }

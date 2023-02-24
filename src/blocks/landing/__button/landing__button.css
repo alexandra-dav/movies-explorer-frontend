@@ -3,7 +3,7 @@
   max-height: 152px;
   max-width: 155px;
   border-radius: 0px;
-  margin: 10px 0 75px 70px;
+  margin: 84px 0 75px 70px;
   padding: 10px 20px;
   background: none;
   border: 1px solid #fff;
@@ -12,4 +12,16 @@
   font-size: 12px;
   line-height: 16px;
   color: #fff;
+  position: inherit;
+}
+.landing__button:hover {
+  opacity: 0.2;
+  transition: 0.5s;
+  cursor: pointer;
+}
+@media screen and (max-width: 769px) {
+  .landing__button {
+    margin: 92px auto 76px auto;
+    font-size: 12px;
+  }    
 }
