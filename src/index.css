@@ -18,6 +18,7 @@
 @import url(./blocks/promo/promo.css);
 @import url(./blocks/promo/__header/promo__header.css);
 @import url(./blocks/promo/__about/promo__about.css);
+@import url(./blocks/promo/__list/promo__list.css);
 @import url(./blocks/promo/__text/promo__text.css);
 @import url(./blocks/promo/__title/promo__title.css);
 @import url(./blocks/promo/__block/promo__block.css);

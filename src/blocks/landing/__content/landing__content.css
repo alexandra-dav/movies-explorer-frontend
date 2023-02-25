@@ -10,7 +10,7 @@
   "subtitle logo"
   "button button";
 }
-@media screen and (max-width: 769px) {
+@media screen and (max-width: 1020px) {
   .landing__content {
     display: flex;
     flex-direction: column;

@@ -1,5 +1,15 @@
 .promo{
-  max-height: 608px;
-  margin: 0;
+  max-height: 641px;
+  margin: 0 70px;
   padding: 0;
+}
+@media screen and (max-width: 1020px) {
+  .promo {
+    margin: 0 50px;
+  }
+}
+@media screen and (max-width: 769px) {
+  .promo {
+    margin: 0 18px;
+  }
 }
