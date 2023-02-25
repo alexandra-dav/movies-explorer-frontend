@@ -1,0 +1,11 @@
+.promo__header{
+  border-bottom: 1px solid #DADADA;
+  min-height: 50px;
+  display: flex;
+  justify-content: left;
+  font-size: 22px;
+  font-weight: 400;
+  line-height: 27px;
+  letter-spacing: -0.04em;
+  margin: 110px 70px 0;
+}

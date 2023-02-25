@@ -1,0 +1,11 @@
+.promo__block{
+  /* font-family: Suisse Intl;  не понятно откуда этот шрифт! */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 17px;
+  letter-spacing: 0px;
+  height: 36px;
+}

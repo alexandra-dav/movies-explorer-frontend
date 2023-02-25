@@ -4,7 +4,7 @@ import logo from "../images/logo.svg";
 
 export function Header(props) {
   return (
-    <header className="header header__color">
+    <header className="header header_color">
       <img src={logo} alt="Логотип" className="header__logo" />
     </header>
   );
