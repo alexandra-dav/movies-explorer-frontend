@@ -1,0 +1,10 @@
+.techs__icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-decoration: none;
+  margin: 0;
+  padding: 0;
+  background: #303030;
+  border-radius: 10px;
+}

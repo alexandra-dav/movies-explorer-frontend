@@ -28,6 +28,14 @@
 @import url(./blocks/promo/__block/_grey/promo__block_grey.css);
 @import url(./blocks/promo/__table/promo__table.css);
 
+@import url(./blocks/techs/techs.css);
+@import url(./blocks/techs/__icon/techs__icon.css);
+@import url(./blocks/techs/__info/techs__info.css);
+@import url(./blocks/techs/__list/techs__list.css);
+@import url(./blocks/techs/__text/techs__text.css);
+@import url(./blocks/techs/__title/techs__title.css);
+@import url(./blocks/techs/_header-top/techs_header-top.css);
+
 @import url(./blocks/footer/footer.css);
 @import url(./blocks/footer/__content/footer__content.css);
 @import url(./blocks/footer/__name/footer__name.css);

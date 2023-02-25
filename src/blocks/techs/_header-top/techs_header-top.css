@@ -1,0 +1,14 @@
+.techs_header-top {
+  padding: 110px 0 0;
+  margin: 0;
+}
+@media screen and (max-width: 1020px) {
+  .techs_header-top {
+    padding: 90px 0 0;
+  }
+}
+@media screen and (max-width: 769px) {
+  .techs_header-top {
+    padding: 70px 0 0;
+  }
+}
