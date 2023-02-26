@@ -1,0 +1,15 @@
+.student__info {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  width: 60%;
+  margin: 66px 0 0;
+  padding: 0;
+  text-align: left;
+}
+@media screen and (max-width: 769px) {
+  .student__info {
+    margin: 0;
+    width: 100%;
+  }
+}

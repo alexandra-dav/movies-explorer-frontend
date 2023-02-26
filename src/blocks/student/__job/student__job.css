@@ -1,0 +1,22 @@
+.student__job {
+  margin: 18px 0 0;
+  padding: 0;
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 20px;
+  letter-spacing: 0px;
+}
+@media screen and (max-width: 1020px) {
+  .student__job {
+    margin: 16px 0 0;
+    font-size: 12px;
+    line-height: 18px;
+  }
+}
+@media screen and (max-width: 769px) {
+  .student__job {
+    margin: 20px 0 0;
+    font-size: 11px;
+    line-height: 16px;
+  }
+}

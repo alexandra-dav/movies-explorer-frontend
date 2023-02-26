@@ -36,6 +36,24 @@
 @import url(./blocks/techs/__title/techs__title.css);
 @import url(./blocks/techs/_header-top/techs_header-top.css);
 
+@import url(./blocks/student/student.css);
+@import url(./blocks/student/__about/student__about.css);
+@import url(./blocks/student/__info/student__info.css);
+@import url(./blocks/student/__job/student__job.css);
+@import url(./blocks/student/__link/student__link.css);
+@import url(./blocks/student/__name/student__name.css);
+@import url(./blocks/student/__photo/student__photo.css);
+
+@import url(./blocks/portfolio/portfolio.css);
+@import url(./blocks/portfolio/__arrow/portfolio__arrow-img.css);
+@import url(./blocks/portfolio/__arrow/portfolio__arrow-link.css);
+@import url(./blocks/portfolio/__header/portfolio__header.css);
+@import url(./blocks/portfolio/__link/portfolio__link.css);
+@import url(./blocks/portfolio/__list/portfolio__list.css);
+@import url(./blocks/portfolio/__title/portfolio__title.css);
+@import url(./blocks/portfolio/__title/_first/portfolio__title_first.css);
+@import url(./blocks/portfolio/__title/_last/portfolio__title_last.css);
+
 @import url(./blocks/footer/footer.css);
 @import url(./blocks/footer/__content/footer__content.css);
 @import url(./blocks/footer/__name/footer__name.css);
