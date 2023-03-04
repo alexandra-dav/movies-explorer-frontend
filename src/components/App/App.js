@@ -1,20 +1,29 @@
-import { Header } from '../Header';
+/* eslint-disable no-unused-vars */
+import React from "react";
+import { useState } from 'react';
 import { Main } from '../Main/Main'
-import { Promo } from '../Main/Promo';
-import { Techs } from '../Main/Techs';
-import { AboutMe }  from '../Main/AboutMe';
+import Login from '../Login';
+import Register from '../Register';
 import { Footer } from '../Footer';
+import { Route, Routes } from "react-router-dom";
+import ProtectedRoute from '../ProtectedRoute/ProtectedRoute'
 
 function App() {
-  return (
+  const [loggedIn, isLoggedIn] = useState(true);
+  return (    
     <>
-    <Header />
-    <Main />
-    <Promo />
-    <Techs />
-    <AboutMe />
-    <Footer />    
+    <Routes>
+      <Route path="/sing-in" element={<Login />} />
+      <Route path="/sing-up" element={<Register />} />
+      
+      <Route
+        path="/"
+        element={<ProtectedRoute loggedIn={loggedIn} component={Main} />}
+      />
+    </Routes>
+    <Footer />
     </>    
+    
   );
 }
 

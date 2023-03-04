@@ -2,9 +2,15 @@
 Он будет содержать только презентационные компоненты и в будущем,
 за исключением шапки навигации.  */
 
-import logo from '../../images/landing-logo.svg'
+import logo from '../../images/landing-logo.svg';
+import { Promo } from './Promo';
+import { Techs } from './Techs';
+import { AboutMe }  from './AboutMe';
+import { Header } from '../Header';
 export function Main() {
   return (
+    <>
+    <Header />
     <section className="landing header_color" aria-label="Стартовая страница">
       <div className="landing__content">
           <img src={logo} alt="Планета ВЕБ" className="landing__logo" />
@@ -13,6 +19,10 @@ export function Main() {
           <button aria-label="navigation" className="landing__button">Узнать больше</button>
       </div>
     </section>
+    <Promo />
+    <Techs />
+    <AboutMe />
+    </>
   );
 }
   

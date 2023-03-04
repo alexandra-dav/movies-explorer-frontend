@@ -1,0 +1,8 @@
+.register__button_singin {
+  margin: 179px 0 0;
+}
+@media screen and (max-width: 426px) {
+  .register__button {
+    margin: 267px 0 0;
+  }
+}

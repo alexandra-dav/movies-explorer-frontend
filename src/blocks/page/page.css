@@ -1,7 +1,7 @@
 .page {
-    width: 90%;
-    max-width: 880px;
     min-width: 320px;
+    max-width: 1280px;
+    height: 100vh;
     background: #000;
     font-family: Inter, Arial, sans-serif;
     color: #FFFFFF;
@@ -14,7 +14,7 @@
     -moz-text-size-adjust: 100%;
     padding: 0;
     margin: 0 auto;
-    height: 100vh;
     display: flex;
     flex-direction: column;
+    position: relative;
 }

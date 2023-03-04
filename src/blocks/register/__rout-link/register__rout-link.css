@@ -1,0 +1,11 @@
+.register__rout-link {
+  margin: 0;
+  padding: 0;
+  color: #4285F4;
+  text-decoration: none;
+}
+.register__rout-link:hover {
+  opacity: 0.6;
+  transition: 0.5s;
+  cursor: pointer;
+}
