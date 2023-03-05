@@ -6,7 +6,9 @@ export function AboutMe() {
   return (
     <>
     <section className="student" aria-label="Про автора">
-      <h2 className="promo__header">Студент</h2>
+      <h2 className="promo__header">
+        <span id="student">Студент</span>
+      </h2>
       <img src={dog} className="student__photo" alt="Новогодний пёсик"></img>
       <div className="student__info">
           <h3 className="student__name">Александра</h3>

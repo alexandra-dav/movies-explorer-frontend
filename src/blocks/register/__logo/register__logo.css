@@ -4,3 +4,8 @@
   width: 38px;
   height: 38px;
 }
+.register__logo:hover {
+  cursor: pointer;
+  opacity: 0.8;
+  transition: 0.5s;
+}

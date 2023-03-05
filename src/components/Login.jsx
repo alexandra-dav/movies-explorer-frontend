@@ -72,7 +72,7 @@ export default function Login() {
         </button>
         <div>
             <p className="register__link">
-            Ещё не зарегистрированы? <Link to="/sing-up" className="register__link register__rout-link">
+            Ещё не зарегистрированы? <Link to="/singup" className="register__link register__rout-link">
             Регистрация
           </Link>
             </p>          

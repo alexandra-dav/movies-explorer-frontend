@@ -86,7 +86,7 @@ function Register() {
         </button>
         <div>
             <p className="register__link">
-                Уже зарегистрированы? <Link to="/sing-in" className="register__link register__rout-link">
+                Уже зарегистрированы? <Link to="/signin" className="register__link register__rout-link">
              Войти
           </Link>
             </p>          

@@ -2,7 +2,9 @@
 export function Techs() {
   return (
     <section className="techs" aria-label="Технологии">
-      <h2 className="promo__header techs_header-top">Технологии</h2>
+      <h2 className="promo__header techs_header-top">
+        <span id="techs">Технологии</span>
+      </h2>
       <div className="techs__info">
           <h3 className="techs__title">7 технологий</h3>
           <p className="techs__text">На курсе веб-разработки мы освоили технологии, 

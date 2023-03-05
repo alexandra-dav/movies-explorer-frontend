@@ -3,7 +3,9 @@
 export function Promo() {
     return (
       <section className="promo" aria-label="О проекте">
-        <h2 className="promo__header">О проекте</h2>
+        <h2 className="promo__header">
+          <span id="promo">О проекте</span>
+        </h2>
         <div className="promo__about">
             <div className="promo__list">
                 <h3 className="promo__title">Дипломный проект включал 5 этапов</h3>

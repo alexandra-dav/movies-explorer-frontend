@@ -1,0 +1,12 @@
+.navigation__profile {
+  display: flex;
+  flex-direction: row;
+  position: fixed;
+  bottom: 89px;
+  margin: 0 auto;
+}
+@media screen and (max-width: 501px) {
+  .navigation__profile {
+    bottom: 55px;
+  }
+}

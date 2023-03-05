@@ -1,0 +1,11 @@
+.navigation__element {
+  margin: 0 0 28px;
+}
+.navigation__element:last-child {
+  margin: 0;
+}
+@media screen and (max-width: 501px) {
+  .navigation__element {
+    margin: 0 0 24px;
+  }
+}

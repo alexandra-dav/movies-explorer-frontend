@@ -1,0 +1,19 @@
+.navigation__link {
+  text-decoration: none;
+  margin: 0;
+  padding: 0 0 4px;
+  color: #FFFFFF;
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 22px;
+}
+.navigation__link:hover {
+  display: inline;
+  border-bottom: 1px solid #FFFFFF;
+  cursor: pointer;
+}
+@media screen and (max-width: 501px) {
+  .navigation__link {
+    padding: 0 0 7px;
+  }
+}

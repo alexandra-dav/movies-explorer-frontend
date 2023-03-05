@@ -6,7 +6,7 @@ const ProtectedRoute = ({ component: Component, ...props }) => {
     <>
     { props.loggedIn
       ? <Component {...props} />
-      : <Navigate replace to="/sing-in" />
+      : <Navigate replace to="/singin" />
     }
     </> 
   );
