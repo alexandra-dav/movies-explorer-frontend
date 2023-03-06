@@ -25,14 +25,14 @@ export function Navigation({ isOpen, onClose, loggedIn }) {
                         </li>
                         <li className="navigation__element">
                           <NavLink
-                            to="/movie"
+                            to="/movies"
                             className={({isActive}) => `navigation__link ${isActive ? "navigation__link_active" : ""}`}
                             onMouseDown={onClose}
                             >Фильмы</NavLink>
                         </li>
                         <li className="navigation__element">
                           <NavLink
-                            to="/"
+                            to="/saved-movies"
                             className={({isActive}) => `navigation__link ${isActive ? "navigation__link_active" : ""}`}
                             onMouseDown={onClose}
                           >Сохранённые фильмы</NavLink>
@@ -40,7 +40,7 @@ export function Navigation({ isOpen, onClose, loggedIn }) {
                     </ul>
                     <div className="navigation__profile">
                       <NavLink
-                        to="/me"
+                        to="/profile"
                         className={({isActive}) => `navigation__link navigation__link_profile ${isActive ? "navigation__link_active" : ""}`}
                         onMouseDown={onClose}
                       >Аккаунт</NavLink>
