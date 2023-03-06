@@ -8,6 +8,9 @@ import { Footer } from '../Footer';
 import { Route, Routes } from "react-router-dom";
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
 import { Navigation } from '../Navigation';
+import { Notfoundpage } from '../Notfoundpage';
+import { SavedMovies } from '../SavedMovies/SavedMovies';
+import { Movies } from '../Movies/Movies';
 
 function App() {
   const [loggedIn, isLoggedIn] = useState(true);
@@ -30,7 +33,6 @@ function App() {
     <Routes>
       <Route path="/signin" element={<Login />} />
       <Route path="/signup" element={<Register />} />
-      
       <Route
         path="/"
         element={
@@ -39,6 +41,9 @@ function App() {
           onNavigationOpen={handleNavigationClick}
         />}
       />
+      <Route path="/saved-movies" element={<SavedMovies />} />
+      <Route path="/movies" element={<Movies />} />
+      <Route path="*" element={<Notfoundpage />} />
     </Routes>
     <Footer />
 
