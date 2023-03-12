@@ -37,7 +37,7 @@ export default function Login() {
         /* onSubmit={handlSubmit} */
       >
         <fieldset className="register__fieldset">
-          <label for="email" class="register__label">E-mail</label>
+          <label htmlFor="email" class="register__label">E-mail</label>
           <input
             type="email"
             id="loginEmail"
@@ -52,7 +52,7 @@ export default function Login() {
           <span className="loginEmail-error"></span>
           </fieldset>
           <fieldset className="register__fieldset">
-            <label for="password" class="register__label">Пароль</label>
+            <label htmlFor="password" class="register__label">Пароль</label>
             <input
               type="password"
               id="loginPassword"
@@ -72,7 +72,7 @@ export default function Login() {
         </button>
         <div>
             <p className="register__link">
-            Ещё не зарегистрированы? <Link to="/singup" className="register__link register__rout-link">
+            Ещё не зарегистрированы? <Link to="/signup" className="register__link register__rout-link">
             Регистрация
           </Link>
             </p>          

@@ -36,7 +36,7 @@ function Register() {
         /* onSubmit={handlSubmit} */
       >
         <fieldset className="register__fieldset">
-          <label for="name" class="register__label">Имя</label>
+          <label htmlFor="name" class="register__label">Имя</label>
           <input
             type="text"
             id="loginName"
@@ -51,7 +51,7 @@ function Register() {
           <span className="registerEmail-error"></span>
         </fieldset>
         <fieldset className="register__fieldset">
-          <label for="email" class="register__label">E-mail</label>
+          <label htmlFor="email" class="register__label">E-mail</label>
           <input
             type="email"
             id="loginEmail"
@@ -66,7 +66,7 @@ function Register() {
           <span className="registerEmail-error"></span>
         </fieldset>
         <fieldset className="register__fieldset">
-          <label for="password" class="register__label">Пароль</label>
+          <label htmlFor="password" class="register__label">Пароль</label>
           <input
             type="password"
             id="loginPassword"
@@ -80,7 +80,6 @@ function Register() {
           />
           <span className="registerName-error"></span>
         </fieldset>
-
         <button aria-label="submit" className="register__button" type="submit">
           Зарегистрироваться
         </button>

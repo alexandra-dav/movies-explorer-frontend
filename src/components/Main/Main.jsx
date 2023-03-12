@@ -8,12 +8,14 @@ import { Techs } from './Techs';
 import { AboutMe }  from './AboutMe';
 import { Header } from '../Header';
 
-export function Main({ onNavigationOpen, loggedIn }) {
+export function Main({ onNavigationOpen, isLogin, windowWidth }) {
   return (
     <>
     <Header
+      router={true}
+      isLogin={isLogin}
       onNavigationOpen={onNavigationOpen}
-      isLogin={loggedIn}
+      /* windowWidth={windowWidth} */
     />
     <section className="landing header_color" aria-label="Стартовая страница">
       <div className="landing__content">

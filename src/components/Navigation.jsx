@@ -1,6 +1,6 @@
 // kомпонент, который отвечает за меню навигации на сайте.
 import { NavLink } from "react-router-dom";
-import profile from '../images/icon-acc.svg'
+import profile from '../images/icon-acc.svg';
 
 export function Navigation({ isOpen, onClose, loggedIn }) {
   return (

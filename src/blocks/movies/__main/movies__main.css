@@ -1,0 +1,18 @@
+.movies__main {
+  grid-area: main;
+  height: min-content;
+  margin: auto 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(47, 47, 47, 1);
+  border-right: 1px solid rgba(80, 80, 80, 1);
+}
+@media screen and (max-width: 769px) {
+  .movies__main {
+    border-radius: 9px;
+    border-right: none;
+    height: 72px;
+  }
+}

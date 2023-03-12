@@ -1,0 +1,18 @@
+.movies__filter {
+  grid-area: filter;
+  margin: auto 0;
+  padding: 0;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  background-color: rgba(47, 47, 47, 1);
+  height: min-content;
+}
+@media screen and (max-width: 769px) {
+  .movies__filter {
+    background-color: black;
+    justify-content: center;
+    margin: 45px 0;
+    border-radius: 0;
+  }
+}
