@@ -1,0 +1,18 @@
+.cards__action_favorit {
+  height: 12px;
+  width: 14px;
+  padding: 0;
+  margin: 19px 24px 0 0;
+  background-image: url(../../../../images/like.svg);
+  background-repeat: no-repeat;
+  background-size: cover;
+  border: none;
+  background-color: rgba(0, 0, 0, 0);
+}
+.cards__action_favorit:active {
+  background-image: url(../../../../images/nonlike.svg);
+  opacity: 1;
+}
+.cards__action_favorit-active {
+  background-image: url(../../../../images/nonlike.svg);
+}

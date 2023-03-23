@@ -1,32 +1,51 @@
 /* eslint-disable no-unused-vars */
 import React from "react";
-import { useState, useEffect } from 'react';
-import { Main } from '../Main/Main'
-import Login from '../Login';
-import Register from '../Register';
-import { Footer } from '../Footer';
-import { Route, Routes } from "react-router-dom";
-// import { Header } from '../Header';
+import { useState, useEffect } from "react";
+import { Main } from "../Main/Main";
+import Login from "../Login";
+import Register from "../Register";
+import { Footer } from "../Footer";
+import { Route, Routes, useNavigate } from "react-router-dom";
 /* TO DO: для защиты авторизацией
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute'; */
-import { Navigation } from '../Navigation';
-import { Notfoundpage } from '../Notfoundpage';
-import { SavedMovies } from '../SavedMovies/SavedMovies';
-import { Movies } from '../Movies/Movies';
-import { Profile } from '../Profile';
+import { Navigation } from "../Navigation";
+import { NavTab } from "../Main/NavTab";
+import { Notfoundpage } from "../Notfoundpage";
+import { SavedMovies } from "../SavedMovies/SavedMovies";
+import { Movies } from "../Movies/Movies";
+import { Profile } from "../Profile";
+import {
+  CurrentUserContext,
+  userContext,
+} from "../../utils/CurrentUserContext";
+import { initialCards } from "../../utils/data";
 
 function App() {
-  const [loggedIn, isLoggedIn] = useState(true);
+  const [currentUser, setCurrentUser] = useState(userContext);
+  const navigate = useNavigate();
+
+  const [loggedIn, isLoggedIn] = useState(false);
   const [isNavigationOpen, setNavigationOpen] = useState(false);
-/*   const [windowWidth, setWindowWidth] = useState(768);
-  function handlChangeWindow (pix) {
-    setWindowWidth(pix);
+  const [isNavTabOpen, setNavTabOpen] = useState(false);
+
+  const [card, setCard] = useState(initialCards);
+
+  function handleAuthorize(data) {
+    setCurrentUser(data);
+    isLoggedIn(true);
+    navigate("/");
   }
-  useEffect(() => {
-    // Узнаем ширину области просмотра (вьюпорта)
-    handlChangeWindow(window.innerWidth);
-    console.log(window.innerWidth);
-  }, windowWidth); */
+  function handleRegister() {
+    navigate("/signin");
+  }
+  function handleUpdateUser(newDataProfile) {
+    console.log(newDataProfile);
+    setCurrentUser(newDataProfile);
+  }
+  function handleLogOut() {
+    isLoggedIn(false);
+    /* localStorage.removeItem("jwt"); */
+  }
   function handleClikButtunClose(evt) {
     if (
       evt.target.classList.contains("navigation_opened") ||
@@ -34,60 +53,82 @@ function App() {
       evt.target.classList.contains("navigation__link")
     ) {
       setNavigationOpen(false);
+      setNavTabOpen(false);
     }
   }
   function handleNavigationClick() {
     setNavigationOpen(!isNavigationOpen);
   }
-  return (    
+  function handleNavTabClick() {
+    setNavTabOpen(!isNavTabOpen);
+  }
+  function handleDeleteCard(card) {
+    setCard((state) => state.filter((c) => c.id !== card.id));
+  }
+  return (
     <>
-    <Routes>
-      <Route path="/signin" element={<Login />} />
-      <Route path="/signup" element={<Register />}/>
-      <Route
-        path="/"
-        element={
-        <Main
-          onNavigationOpen={handleNavigationClick}
-          isLogin={loggedIn}
-          /* windowWidth={windowWidth} */
-        />}
-      />
-      <Route
-        path="/saved-movies"
-        element={
-          <SavedMovies
-            onNavigationOpen={handleNavigationClick}
-            isLogin={loggedIn}
+      <CurrentUserContext.Provider value={currentUser}>
+        <Routes>
+          <Route
+            path="/signin"
+            element={<Login onAuthorize={handleAuthorize} />}
           />
-        } />
-      <Route
-        path="/movies"
-        element={
-        <Movies
-          onNavigationOpen={handleNavigationClick}
-          isLogin={loggedIn}
-        />
-      } />
-      <Route
-        path="/profile"
-        element={
-        <Profile
-          onNavigationOpen={handleNavigationClick}
-          isLogin={loggedIn}
-        />
-      } />
-      <Route path="*" element={<Notfoundpage />} />
-    </Routes>
-    <Footer />
+          <Route
+            path="/signup"
+            element={<Register onRegister={handleRegister} />}
+          />
+          <Route
+            path="/"
+            element={
+              <Main
+                onNavigationOpen={handleNavigationClick}
+                onNavTabOpen={handleNavTabClick}
+                isLogin={loggedIn}
+                /* windowWidth={windowWidth} */
+              />
+            }
+          />
+          <Route
+            path="/saved-movies"
+            element={
+              <SavedMovies
+                onNavigationOpen={handleNavigationClick}
+                isLogin={loggedIn}
+                card={card}
+                onCardDelete={handleDeleteCard}
+              />
+            }
+          />
+          <Route
+            path="/movies"
+            element={
+              <Movies
+                onNavigationOpen={handleNavigationClick}
+                isLogin={loggedIn}
+                card={card}
+                onCardDelete={handleDeleteCard}
+              />
+            }
+          />
+          <Route
+            path="/profile"
+            element={
+              <Profile
+                isLogin={loggedIn}
+                onNavigationOpen={handleNavigationClick}
+                onLogout={handleLogOut}
+                onUpdateUser={handleUpdateUser}
+              />
+            }
+          />
+          <Route path="*" element={<Notfoundpage />} />
+        </Routes>
+        <Footer />
 
-    <Navigation
-      isOpen={isNavigationOpen}
-      onClose={handleClikButtunClose}
-      loggedIn={loggedIn}
-    />
-    </>    
-    
+        <Navigation isOpen={isNavigationOpen} onClose={handleClikButtunClose} />
+        <NavTab isOpen={isNavTabOpen} onClose={handleClikButtunClose} />
+      </CurrentUserContext.Provider>
+    </>
   );
 }
 

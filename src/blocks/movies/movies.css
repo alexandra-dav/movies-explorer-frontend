@@ -1,7 +1,7 @@
 .movies{
   margin: 0 70px;
-  padding: 0;
   position: relative;
+  padding: 0;
 }
 @media screen and (max-width: 1020px) {
   .movies {

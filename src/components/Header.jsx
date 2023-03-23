@@ -1,8 +1,8 @@
 // компонент, который отрисовывает шапку сайта на страницу.
 import logo from "../images/logo.svg";
-import burger from '../images/icon-main.svg';
+import burger from "../images/icon-main.svg";
 import { Link, NavLink } from "react-router-dom";
-import profile from '../images/icon-acc.svg'
+import profile from "../images/icon-acc.svg";
 
 export function Header(props) {
   return (
@@ -10,42 +10,57 @@ export function Header(props) {
       <Link to="/">
         <img src={logo} alt="Логотип" className="header__logo" />
       </Link>
-      { 
-        props.isLogin
-        ? (
-          window.innerWidth>768
-          ? (
-            <div className="header__main">
-              <ul className="header__navigate">
-                <NavLink 
-                  to="/movies"
-                  className={({isActive}) => `header__name header__link ${isActive ? "header__name_active" : ""}`}
-                >Фильмы</NavLink>
-                <NavLink 
-                  to="/saved-movies"
-                  className={({isActive}) => `header__name header__link ${isActive ? "header__name_active" : ""}`}
-                >Сохранённые фильмы</NavLink>
-              </ul>
-              <div className="header__navigate">
+      {props.isLogin ? (
+        window.innerWidth > 768 ? (
+          <div className="header__main">
+            <ul className="header__navigate">
+              <NavLink
+                to="/movies"
+                className={({ isActive }) =>
+                  `header__name header__link ${
+                    isActive ? "header__name_active" : ""
+                  }`
+                }
+              >
+                Фильмы
+              </NavLink>
+              <NavLink
+                to="/saved-movies"
+                className={({ isActive }) =>
+                  `header__name header__link ${
+                    isActive ? "header__name_active" : ""
+                  }`
+                }
+              >
+                Сохранённые фильмы
+              </NavLink>
+            </ul>
+            <div className="header__navigate">
               <NavLink
                 to="/profile"
-                className={({isActive}) => `header__name header__link ${isActive ? "header__name_active" : ""}`}
-                >
+                className={({ isActive }) =>
+                  `header__name header__link ${
+                    isActive ? "header__name_active" : ""
+                  }`
+                }
+              >
                 Аккаунт
                 <img src={profile} alt="Аккаунт" className="navigation__logo" />
-                </NavLink>
-                
-              </div>
+              </NavLink>
             </div>
-          )
-          : (
-            <div className="header__menu">
-              <img src={burger} onMouseDown={props.onNavigationOpen} className="header__img" alt="Меню" />
-            </div>          
-          )
+          </div>
+        ) : (
+          <div className="header__menu">
+            <img
+              src={burger}
+              onMouseDown={props.onNavigationOpen}
+              className="header__img"
+              alt="Меню"
+            />
+          </div>
         )
-        : (
-          <div className="header__menu">             
+      ) : (
+        <div className="header__menu">
           <Link to="/signup" className="header__link">
             Регистрация
           </Link>
@@ -54,13 +69,10 @@ export function Header(props) {
               Войти
             </Link>
           </button>
-        </div> 
-        )
-        
-      }
+        </div>
+      )}
     </header>
   );
-  
 }
 
 /* return (

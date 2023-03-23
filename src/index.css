@@ -119,3 +119,13 @@
 @import url(./blocks/notfound/__link/notfound__link.css);
 @import url(./blocks/notfound/__mistake/notfound__mistake.css);
 @import url(./blocks/notfound/__title/notfound__title.css);
+
+@import url(./blocks/cards/cards.css);
+@import url(./blocks/cards/__container/cards__container.css);
+@import url(./blocks/cards/__duration/cards__duration.css);
+@import url(./blocks/cards/__image/cards__image.css);
+@import url(./blocks/cards/__info/cards__info.css);
+@import url(./blocks/cards/__name/cards__name.css);
+@import url(./blocks/cards/__action/_delete/cards__action_delete.css);
+@import url(./blocks/cards/__action/_favorit/cards__action_favorit.css);
+@import url(./blocks/cards/__action/cards__action.css);

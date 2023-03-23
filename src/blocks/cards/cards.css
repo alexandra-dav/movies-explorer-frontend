@@ -1,0 +1,26 @@
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 364px);
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  row-gap: 24px;
+  column-gap: 17px;
+  margin: 0 70px;
+  border-top: 1px solid rgba(66, 66, 66, 1);
+  padding: 80px 0 0;
+}
+@media screen and (max-width: 1020px) {
+  .cards {
+    margin: 0 30px;
+    grid-template-columns: repeat(auto-fill, 339px);
+    row-gap: 30px;
+  }
+}
+@media screen and (max-width: 769px) {
+  .cards {
+    margin: 0 10px;
+    grid-template-columns: repeat(auto-fill, 300px);
+    row-gap: 14px;
+  }
+}

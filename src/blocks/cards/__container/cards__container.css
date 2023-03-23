@@ -1,0 +1,13 @@
+.cards__container {
+  /* min-height: 237px; */
+  background-color: rgba(34, 34, 34, 1);
+  border-radius: 6px;
+  overflow: hidden;
+  color: black;
+  margin: 0;
+  padding: 0;
+  position: relative;
+}
+.cards__container:hover {
+  cursor: pointer;
+}

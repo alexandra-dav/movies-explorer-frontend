@@ -1,26 +1,25 @@
 //  компонент страницы авторизации.
-import logo from '../images/logo.svg';
+import logo from "../images/logo.svg";
 import { Link } from "react-router-dom";
-/* import React from "react";
-import { useState } from "react"; */
+import { useState } from "react";
 
-export default function Login() {
-/*   const [data, setData] = useState({
-    email: '',
-    password: ''
+export default function Login({ onAuthorize }) {
+  const [data, setData] = useState({
+    email: "",
+    password: "",
   });
   const handlChange = (e) => {
-    const {name, value} = e.target;
+    const { name, value } = e.target;
     setData({
       ...data,
       [name]: value,
     });
-  }
+  };
   const handlSubmit = (e) => {
     e.preventDefault();
     let { password, email } = data;
-    onAuthorize({password, email});    
-  } */
+    onAuthorize({ password, email });
+  };
 
   return (
     <div className="register">
@@ -30,14 +29,12 @@ export default function Login() {
         </Link>
         <h1 className="register__title">Рады видеть!</h1>
       </div>
-      
-      <form
-        name="login-form"
-        className="register__form"
-        /* onSubmit={handlSubmit} */
-      >
+
+      <form name="login-form" className="register__form" onSubmit={handlSubmit}>
         <fieldset className="register__fieldset">
-          <label htmlFor="email" class="register__label">E-mail</label>
+          <label htmlFor="email" className="register__label">
+            E-mail
+          </label>
           <input
             type="email"
             id="loginEmail"
@@ -46,36 +43,45 @@ export default function Login() {
             minLength="2"
             maxLength="40"
             required
-            /* value={data.email}
-            onChange={handlChange} */
+            value={data.email}
+            onChange={handlChange}
+            placeholder="почта"
           />
           <span className="loginEmail-error"></span>
-          </fieldset>
-          <fieldset className="register__fieldset">
-            <label htmlFor="password" class="register__label">Пароль</label>
-            <input
-              type="password"
-              id="loginPassword"
-              name="password"
-              className="register__input register__input_form_pass"
-              minLength="2"
-              maxLength="200"
-              required
-              /* value={data.password}
-              onChange={handlChange} */
-            />
-            <span className="loginPass-error"></span>
-          </fieldset>
+        </fieldset>
+        <fieldset className="register__fieldset">
+          <label htmlFor="password" className="register__label">
+            Пароль
+          </label>
+          <input
+            type="password"
+            id="loginPassword"
+            name="password"
+            className="register__input register__input_form_pass"
+            minLength="2"
+            maxLength="200"
+            required
+            value={data.password}
+            onChange={handlChange}
+            placeholder="пароль"
+          />
+          <span className="loginPass-error"></span>
+        </fieldset>
 
-        <button aria-label="submit" className="register__button register__button_singin" type="submit">
+        <button
+          aria-label="submit"
+          className="register__button register__button_singin"
+          type="submit"
+        >
           Войти
         </button>
         <div>
-            <p className="register__link">
-            Ещё не зарегистрированы? <Link to="/signup" className="register__link register__rout-link">
-            Регистрация
-          </Link>
-            </p>          
+          <p className="register__link">
+            Ещё не зарегистрированы?{" "}
+            <Link to="/signup" className="register__link register__rout-link">
+              Регистрация
+            </Link>
+          </p>
         </div>
       </form>
     </div>

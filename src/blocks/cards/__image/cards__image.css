@@ -1,0 +1,18 @@
+.cards__image {
+  display: flex;
+  height: 203px;
+  margin: 0 auto 0;
+  padding: 0;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+@media screen and (max-width: 1020px) {
+  .cards__image {
+    height: 190px;
+  }
+}
+@media screen and (max-width: 769px) {
+  .cards__image {
+    height: 168px;
+  }
+}

@@ -1,0 +1,20 @@
+.cards__duration {
+  grid-area: time;
+  margin: 0 0 16px 16px;
+  padding: 0;
+  color: rgba(139, 139, 139, 1);
+  font-weight: 400;
+  font-size: 11px;
+  line-height: 13px;
+}
+@media screen and (max-width: 1020px) {
+  .cards__duration {
+    margin: 0 0 14px 14px;
+  }
+}
+@media screen and (max-width: 769px) {
+  .cards__image {
+    font-size: 10px;
+    line-height: 12px;
+  }
+}

@@ -1,25 +1,26 @@
 // компонент страницы регистрации.
-import logo from '../images/logo.svg';
+import logo from "../images/logo.svg";
 import { Link } from "react-router-dom";
-/* import { useState } from "react"; */
+import { useState } from "react";
 
-function Register() {
-/*   const [data, setData] = useState({
-    email: '',
-    password: ''
+function Register({ onRegister }) {
+  const [data, setData] = useState({
+    name: "",
+    email: "",
+    password: "",
   });
   const handlChange = (e) => {
-    const {name, value} = e.target;
+    const { name, value } = e.target;
     setData({
       ...data,
       [name]: value,
     });
-  }
+  };
   const handlSubmit = (e) => {
     e.preventDefault();
     let { password, email } = data;
-    onRegister({password, email});    
-  } */
+    onRegister({ password, email });
+  };
 
   return (
     <div className="register">
@@ -29,14 +30,12 @@ function Register() {
         </Link>
         <h1 className="register__title">Добро пожаловать!</h1>
       </div>
-      
-      <form
-        name="login-form"
-        className="register__form"
-        /* onSubmit={handlSubmit} */
-      >
+
+      <form name="login-form" className="register__form" onSubmit={handlSubmit}>
         <fieldset className="register__fieldset">
-          <label htmlFor="name" class="register__label">Имя</label>
+          <label htmlFor="name" className="register__label">
+            Имя
+          </label>
           <input
             type="text"
             id="loginName"
@@ -45,13 +44,16 @@ function Register() {
             minLength="2"
             maxLength="40"
             required
-            /* value={data.email}
-            onChange={handlChange} */
+            value={data.name}
+            onChange={handlChange}
+            placeholder="имя"
           />
           <span className="registerEmail-error"></span>
         </fieldset>
         <fieldset className="register__fieldset">
-          <label htmlFor="email" class="register__label">E-mail</label>
+          <label htmlFor="email" className="register__label">
+            E-mail
+          </label>
           <input
             type="email"
             id="loginEmail"
@@ -60,23 +62,27 @@ function Register() {
             minLength="2"
             maxLength="40"
             required
-            /* value={data.email}
-            onChange={handlChange} */
+            value={data.email}
+            onChange={handlChange}
+            placeholder="почта"
           />
           <span className="registerEmail-error"></span>
         </fieldset>
         <fieldset className="register__fieldset">
-          <label htmlFor="password" class="register__label">Пароль</label>
+          <label htmlFor="password" className="register__label">
+            Пароль
+          </label>
           <input
             type="password"
             id="loginPassword"
             name="password"
-            className="register__input register__input_form_pass"
+            className="register__input  register__input_form_pass"
             minLength="2"
             maxLength="200"
             required
-            /* value={data.password}
-            onChange={handlChange} */
+            value={data.password}
+            onChange={handlChange}
+            placeholder="пароль"
           />
           <span className="registerName-error"></span>
         </fieldset>
@@ -84,11 +90,12 @@ function Register() {
           Зарегистрироваться
         </button>
         <div>
-            <p className="register__link">
-                Уже зарегистрированы? <Link to="/signin" className="register__link register__rout-link">
-             Войти
-          </Link>
-            </p>          
+          <p className="register__link">
+            Уже зарегистрированы?{" "}
+            <Link to="/signin" className="register__link register__rout-link">
+              Войти
+            </Link>
+          </p>
         </div>
       </form>
     </div>
