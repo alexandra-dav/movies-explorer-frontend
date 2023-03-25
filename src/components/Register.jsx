@@ -33,7 +33,7 @@ function Register({ onRegister }) {
 
       <form name="login-form" className="register__form" onSubmit={handlSubmit}>
         <fieldset className="register__fieldset">
-          <label htmlFor="name" className="register__label">
+          <label htmlFor="loginName" className="register__label">
             Имя
           </label>
           <input
@@ -51,7 +51,7 @@ function Register({ onRegister }) {
           <span className="registerEmail-error"></span>
         </fieldset>
         <fieldset className="register__fieldset">
-          <label htmlFor="email" className="register__label">
+          <label htmlFor="loginEmail" className="register__label">
             E-mail
           </label>
           <input
@@ -69,7 +69,7 @@ function Register({ onRegister }) {
           <span className="registerEmail-error"></span>
         </fieldset>
         <fieldset className="register__fieldset">
-          <label htmlFor="password" className="register__label">
+          <label htmlFor="loginPassword" className="register__label">
             Пароль
           </label>
           <input

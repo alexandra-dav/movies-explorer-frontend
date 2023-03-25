@@ -4,7 +4,6 @@ import { useState, useEffect } from "react";
 import { Main } from "../Main/Main";
 import Login from "../Login";
 import Register from "../Register";
-import { Footer } from "../Footer";
 import { Route, Routes, useNavigate } from "react-router-dom";
 /* TO DO: для защиты авторизацией
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute'; */
@@ -123,7 +122,6 @@ function App() {
           />
           <Route path="*" element={<Notfoundpage />} />
         </Routes>
-        <Footer />
 
         <Navigation isOpen={isNavigationOpen} onClose={handleClikButtunClose} />
         <NavTab isOpen={isNavTabOpen} onClose={handleClikButtunClose} />

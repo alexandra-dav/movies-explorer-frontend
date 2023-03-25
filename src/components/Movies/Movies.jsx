@@ -2,6 +2,7 @@
 import { Header } from "../Header";
 import { SearchForm } from "./SearchForm";
 import { MoviesCardList } from "./MoviesCardList";
+import { Footer } from "../Footer";
 
 export function Movies({ isLogin, onNavigationOpen, card, onCardDelete }) {
   return (
@@ -17,6 +18,7 @@ export function Movies({ isLogin, onNavigationOpen, card, onCardDelete }) {
         card={card}
         myMovies={false}
       />
+      <Footer />
     </>
   );
 }

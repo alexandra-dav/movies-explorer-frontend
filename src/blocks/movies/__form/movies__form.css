@@ -23,7 +23,7 @@
   .movies__form {
     margin: 80px 0 0;
     height: max-content;
-    background-color: black;
+    background-color: #202020;
     grid-template-columns: 100%;
     grid-template-areas: 
     "main" 

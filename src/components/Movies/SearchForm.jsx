@@ -30,12 +30,15 @@ export function SearchForm() {
             id="movies"
             name="movies"
             placeholder="Фильм"
+            required
           />
-          <img
-            src={find}
-            alt="Поиск"
-            className="movies__logo movies__logo_find"
-          />
+          <button className="movies__find">
+            <img
+              src={find}
+              alt="Поиск"
+              className="movies__logo movies__logo_find"
+            />
+          </button>
         </div>
         <div className="movies__filter">
           <img

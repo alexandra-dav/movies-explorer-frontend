@@ -10,7 +10,7 @@
 }
 @media screen and (max-width: 769px) {
   .movies__filter {
-    background-color: black;
+    background-color: #202020;
     justify-content: center;
     margin: 45px 0;
     border-radius: 0;

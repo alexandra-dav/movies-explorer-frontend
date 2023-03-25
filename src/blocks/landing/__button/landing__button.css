@@ -1,7 +1,5 @@
 .landing__button {
   grid-area: button;
-  max-height: 152px;
-  max-width: 155px;
   border-radius: 0px;
   margin: 84px 0 75px 70px;
   padding: 10px 20px;
@@ -22,11 +20,10 @@
 @media screen and (max-width: 1020px) {
   .landing__button {
     margin: 92px auto 76px;
-    font-size: 12px;
-  }    
+  }
 }
 @media screen and (max-width: 769px) {
   .landing__button {
     margin: 80px auto 30px;
-  }    
+  }
 }

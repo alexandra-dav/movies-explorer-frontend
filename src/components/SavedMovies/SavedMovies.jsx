@@ -2,6 +2,7 @@
 import { Header } from "../Header";
 import { MoviesCardList } from "../Movies/MoviesCardList";
 import { SearchForm } from "../Movies/SearchForm";
+import { Footer } from "../Footer";
 
 export function SavedMovies({ isLogin, onNavigationOpen, card, onCardDelete }) {
   return (
@@ -13,6 +14,7 @@ export function SavedMovies({ isLogin, onNavigationOpen, card, onCardDelete }) {
       />
       <SearchForm />
       <MoviesCardList onCardDelete={onCardDelete} card={card} myMovies={true} />
+      <Footer />    
     </>
   );
 }

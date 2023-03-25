@@ -1,6 +1,7 @@
 .cards__image {
   display: flex;
   height: 203px;
+  width: 100%;
   margin: 0 auto 0;
   padding: 0;
   background-size: cover;

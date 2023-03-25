@@ -2,7 +2,7 @@
   position: relative;
   display: grid;
   justify-content: space-between;
-  grid-template-columns: 70% 30%;
+  grid-template-columns: 60% 40%;
   padding: 0;
   margin: 0;
   grid-template-areas: 

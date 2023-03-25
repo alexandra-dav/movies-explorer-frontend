@@ -1,7 +1,7 @@
-.landing__logo{
+.landing__logo {
   grid-area: logo;
-  max-height: 152px;
-  max-width: 155px;
+  max-height: 310px;
+  max-width: 304px;
   border-radius: 0px;
   margin: 75px 70px 0 0;
   padding: 0;
@@ -10,10 +10,12 @@
 @media screen and (max-width: 1020px) {
   .landing__logo {
     margin: 0 auto;
-  }    
+  }
 }
 @media screen and (max-width: 769px) {
   .landing__logo {
     margin: 70px auto 0 auto;
+    max-height: 210px;
+    max-width: 206px;
   }
 }

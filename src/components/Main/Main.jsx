@@ -7,6 +7,7 @@ import { Promo } from "./Promo";
 import { Techs } from "./Techs";
 import { AboutMe } from "./AboutMe";
 import { Header } from "../Header";
+import { Footer } from "../Footer";
 
 export function Main({ onNavigationOpen, isLogin, onNavTabOpen }) {
   return (
@@ -17,6 +18,7 @@ export function Main({ onNavigationOpen, isLogin, onNavTabOpen }) {
         onNavigationOpen={onNavigationOpen}
         /* windowWidth={windowWidth} */
       />
+      <main>
       <section className="landing header_color" aria-label="Стартовая страница">
         <div className="landing__content">
           <img src={logo} alt="Планета ВЕБ" className="landing__logo" />
@@ -38,6 +40,8 @@ export function Main({ onNavigationOpen, isLogin, onNavTabOpen }) {
       <Promo />
       <Techs />
       <AboutMe />
+      </main>      
+      <Footer />
     </>
   );
 }

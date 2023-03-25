@@ -7,9 +7,9 @@
 @import url(./blocks/header/header.css);
 @import url(./blocks/header/_color/header_color.css);
 @import url(./blocks/header/__logo/header__logo.css);
-@import url(./blocks/header/__button/header__button.css);
 @import url(./blocks/header/__img/header__img.css);
 @import url(./blocks/header/__menu/header__menu.css);
+@import url(./blocks/header/__name/_link/header__name_link.css);
 @import url(./blocks/header/__link/header__link.css);
 @import url(./blocks/header/__link/_button/header__link_button.css);
 @import url(./blocks/header/__navigate/header__navigate.css);
@@ -23,6 +23,7 @@
 @import url(./blocks/landing/__subtitle/landing__subtitle.css);
 @import url(./blocks/landing/__title/landing__title.css);
 @import url(./blocks/landing/__button/landing__button.css);
+@import url(./blocks/landing/__button/_movies/landing__button_movies.css);
 
 @import url(./blocks/promo/promo.css);
 @import url(./blocks/promo/__header/promo__header.css);
@@ -96,6 +97,7 @@
 @import url(./blocks/movies/__logo/movies__logo.css);
 @import url(./blocks/movies/__logo/_filter/movies__logo_filter.css);
 @import url(./blocks/movies/__logo/_find/movies__logo_find.css);
+@import url(./blocks/movies/__find/movies__find.css);
 @import url(./blocks/movies/__logo/_loupe/movies__logo_loupe.css);
 @import url(./blocks/movies/__main/movies__main.css);
 @import url(./blocks/movies/__search/movies__search.css);

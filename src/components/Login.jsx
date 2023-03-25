@@ -32,7 +32,7 @@ export default function Login({ onAuthorize }) {
 
       <form name="login-form" className="register__form" onSubmit={handlSubmit}>
         <fieldset className="register__fieldset">
-          <label htmlFor="email" className="register__label">
+          <label htmlFor="loginEmail" className="register__label">
             E-mail
           </label>
           <input
@@ -50,7 +50,7 @@ export default function Login({ onAuthorize }) {
           <span className="loginEmail-error"></span>
         </fieldset>
         <fieldset className="register__fieldset">
-          <label htmlFor="password" className="register__label">
+          <label htmlFor="loginPassword" className="register__label">
             Пароль
           </label>
           <input
