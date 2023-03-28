@@ -9,7 +9,7 @@
   }
 }
 @media screen and (max-width: 769px) {
-  .landing__button {
+  .landing__button_movies {
     width: 200px;
   }
 }

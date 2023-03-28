@@ -1,6 +1,5 @@
-/* eslint-disable no-unused-vars */
 import React from "react";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Main } from "../Main/Main";
 import Login from "../Login";
 import Register from "../Register";

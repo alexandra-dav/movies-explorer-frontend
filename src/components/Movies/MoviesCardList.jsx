@@ -1,5 +1,3 @@
-/* компонент, который управляет отрисовкой карточек фильмов 
-на страницу и их количеством. */
 import { MoviesCard } from "./MoviesCard";
 
 export function MoviesCardList(props) {

@@ -12,12 +12,14 @@ export function Movies({ isLogin, onNavigationOpen, card, onCardDelete }) {
         isLogin={isLogin}
         onNavigationOpen={onNavigationOpen}
       />
-      <SearchForm />
-      <MoviesCardList
-        onCardDelete={onCardDelete}
-        card={card}
-        myMovies={false}
-      />
+      <main>
+        <SearchForm />
+        <MoviesCardList
+          onCardDelete={onCardDelete}
+          card={card}
+          myMovies={false}
+        />
+      </main>
       <Footer />
     </>
   );

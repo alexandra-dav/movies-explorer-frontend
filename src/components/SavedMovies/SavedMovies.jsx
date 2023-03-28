@@ -12,9 +12,15 @@ export function SavedMovies({ isLogin, onNavigationOpen, card, onCardDelete }) {
         isLogin={isLogin}
         onNavigationOpen={onNavigationOpen}
       />
-      <SearchForm />
-      <MoviesCardList onCardDelete={onCardDelete} card={card} myMovies={true} />
-      <Footer />    
+      <main>
+        <SearchForm />
+        <MoviesCardList
+          onCardDelete={onCardDelete}
+          card={card}
+          myMovies={true}
+        />
+      </main>
+      <Footer />
     </>
   );
 }

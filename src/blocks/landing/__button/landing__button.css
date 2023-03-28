@@ -2,7 +2,7 @@
   grid-area: button;
   border-radius: 0px;
   margin: 84px 0 75px 70px;
-  padding: 10px 20px;
+  padding: 10px 0;
   background: none;
   border: 1px solid #fff;
   opacity: 60%;
@@ -11,6 +11,7 @@
   line-height: 16px;
   color: #fff;
   position: inherit;
+  width: 129px;
 }
 .landing__button:hover {
   opacity: 0.2;
