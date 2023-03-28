@@ -1,0 +1,5 @@
+.promo__block_grey{
+  grid-area: grey;
+  background: #303030;
+  color: #FFF;
+}

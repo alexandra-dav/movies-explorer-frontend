@@ -1,0 +1,29 @@
+.landing__subtitle {
+  grid-area: subtitle;
+  max-width: 310px;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 16px;
+  text-align: left;
+  margin: 36px 0 0 70px;
+  opacity: 0.5;
+}
+@media screen and (max-width: 1020px) {
+  .landing__subtitle {
+    margin: 22px auto 0;
+    font-size: 13px;
+    text-align: center;
+    line-height: 14px;
+  }    
+}
+@media screen and (max-width: 769px) {
+  .landing__subtitle {
+    line-height: 16px;
+  }    
+}
+@media screen and (max-width: 426px) {
+  .landing__subtitle {
+    margin: 24px 30px 0;
+  }    
+}

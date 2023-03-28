@@ -1,0 +1,5 @@
+.promo__block_green{
+  grid-area: green;
+  background: #3DDC84;
+  color: #000;
+}

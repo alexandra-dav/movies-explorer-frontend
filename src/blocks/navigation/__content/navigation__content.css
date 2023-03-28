@@ -1,0 +1,13 @@
+.navigation__content {
+  display: flex;
+  flex-direction: row;
+  border-radius: 10px;
+  position: relative;
+  width: 70vh;
+  background: #202020;
+}
+@media screen and (max-width: 501px) {
+  .navigation__content {
+    width: 100vh;
+  }
+}

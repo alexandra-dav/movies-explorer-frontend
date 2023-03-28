@@ -1,0 +1,9 @@
+.movies__tittle-filter {
+  margin: 0 20px 0 0;
+  padding: 0;
+}
+@media screen and (max-width: 769px) {
+  .movies__tittle-filter {
+    margin: 0;
+  }
+}

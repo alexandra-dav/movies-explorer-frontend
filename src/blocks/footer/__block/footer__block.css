@@ -1,0 +1,22 @@
+.footer__block {
+    grid-area: links;
+    display: inline-block;
+    padding: 0;
+    margin: 20px 0;
+}
+
+.footer__block:first-child {
+  padding-right: 20px;
+}
+
+@media screen and (max-width: 425px) {
+  .footer__block {
+    display: block;
+    margin: 0;
+    padding: 0;
+    color: rgba(255, 255, 255, 1);
+  }
+  .footer__block:first-child {
+    padding-right: 0;
+  }
+}

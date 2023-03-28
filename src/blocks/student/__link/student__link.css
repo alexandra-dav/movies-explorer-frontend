@@ -1,0 +1,27 @@
+.student__link {
+  margin: 99px 0 101px;
+  padding: 0;
+  text-decoration: none;
+  color: #FFFFFF;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 17px;
+  letter-spacing: 0em;
+}
+.student__link:hover {
+  opacity: 0.8;
+  transition: 0.5s;
+  cursor: pointer;
+}
+@media screen and (max-width: 1020px) {
+  .student__link {
+    margin: 87px 0 91px;
+    font-size: 14px;
+    line-height: 17px;
+  }
+}
+@media screen and (max-width: 769px) {
+  .student__link {
+    margin: 40px 0 70px;
+  }
+}

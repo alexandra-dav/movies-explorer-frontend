@@ -1,0 +1,22 @@
+.header__img {
+  margin: auto 70px auto 0;
+  height: 44px;
+  width: 44px;
+}
+.header__img:hover {
+  cursor: pointer;
+  opacity: 0.8;
+  transition: 0.5s;
+}
+@media screen and (max-width: 1020px) {
+  .header__img {
+    margin: auto 30px auto 0;
+  }
+}
+@media screen and (max-width: 769px) {
+  .header__img {
+    height: 43px;
+    width: 40px;
+    margin: auto 14px auto 0;
+  }
+}

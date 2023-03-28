@@ -1,0 +1,4 @@
+.navigation__link_active {
+  display: inline;
+  border-bottom: 1px solid #FFFFFF;
+}

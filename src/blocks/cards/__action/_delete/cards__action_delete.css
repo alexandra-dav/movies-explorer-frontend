@@ -1,0 +1,15 @@
+.cards__action_delete {
+    width: 6.84px;
+    height: 6.72px;
+    padding: 0;
+    margin: 20px 28px 0 0;
+    background-image: url(../../../../images/d4.svg);
+    background-repeat: no-repeat;
+    background-size: cover;
+    border: none;
+    background-color: rgba(0, 0, 0, 0);
+  }
+  .cards__action_delete-hidden {
+    display: none;
+  }
+  

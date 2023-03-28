@@ -1,0 +1,19 @@
+.landing__content {
+  position: relative;
+  display: grid;
+  justify-content: space-between;
+  grid-template-columns: 60% 40%;
+  padding: 0;
+  margin: 0;
+  grid-template-areas: 
+  "title logo"
+  "subtitle logo"
+  "button button";
+}
+@media screen and (max-width: 1020px) {
+  .landing__content {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+  }    
+}

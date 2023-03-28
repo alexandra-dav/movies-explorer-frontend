@@ -1,0 +1,8 @@
+.navigation__link_profile {
+  padding: 4px 0 4px 0;
+}
+@media screen and (max-width: 501px) {
+  .navigation__link_profile {
+    padding: 4px 0 7px 0;
+  }
+}

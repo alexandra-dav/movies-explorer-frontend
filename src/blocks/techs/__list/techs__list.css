@@ -1,0 +1,33 @@
+.techs__list {
+  display: grid;
+  grid-template-columns: repeat(7, 90px);
+  min-height: 60px;
+  justify-content: center;
+  list-style-type: none;
+  margin: 100px 0 0;
+  padding: 0 0 100px;
+  gap: 10px;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 17px;
+  letter-spacing: -0.04em;
+}
+@media screen and (max-width: 1020px) {
+  .techs__list {
+    grid-template-columns: repeat(7, 84px);
+    min-height: 57px;
+    margin: 83px 0 0;
+    padding: 0 0 90px;
+    font-size: 12px;
+  }    
+}
+@media screen and (max-width: 769px) {
+  .techs__list {
+    grid-template-columns: repeat(2, 84px);
+
+    grid-auto-rows: 57px;
+    margin: 50px 0 0;
+    padding: 0 0 70px;
+    line-height: 15px;
+  }
+}

@@ -1,0 +1,8 @@
+.cards__action {
+  grid-area: action;
+}
+.cards__action:hover {
+  opacity: 0.6;
+  transition: 0.5s;
+  cursor: pointer;
+}

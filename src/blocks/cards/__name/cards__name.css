@@ -1,0 +1,25 @@
+.cards__name {
+  grid-area: title;
+  padding: 0;
+  margin: 16px 0 16px 16px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  max-width: 290px;
+  color: rgba(255, 255, 255, 1);
+  font-style: normal;
+  font-weight: 500;
+  font-size: 13px;
+  line-height: 16px;
+}
+@media screen and (max-width: 1020px) {
+  .cards__name {
+    margin: 14px 0 14px 14px;
+  }
+}
+@media screen and (max-width: 769px) {
+  .cards__name {
+    font-size: 12px;
+    line-height: 15px;
+  }
+}

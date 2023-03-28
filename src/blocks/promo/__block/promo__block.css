@@ -1,0 +1,12 @@
+.promo__block{
+  /* font-family: Suisse Intl;  не понятно откуда этот шрифт! */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 36px;
+}
+@media screen and (max-width: 769px) {
+  .promo__block {
+    height: 35px;
+  }
+}

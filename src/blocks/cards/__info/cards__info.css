@@ -1,0 +1,9 @@
+.cards__info {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  grid-template-columns: 90% 10%;
+  grid-template-areas:
+  "title action"
+  "time action";
+}

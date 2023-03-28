@@ -1,0 +1,27 @@
+.student__photo {
+  position: absolute;
+  right: 0;
+  padding: 0;
+  margin: 66px 0 0;
+  background-repeat: no-repeat;
+  background-size: cover;
+  max-height: 350px;
+  max-width: 270px;
+  border-radius: 10px;
+}
+@media screen and (max-width: 1020px) {
+  .student__photo {
+    max-height: 307px;
+    max-width: 255px;
+  }
+}
+@media screen and (max-width: 769px) {
+  .student__photo {
+    display: flex;
+    position: initial;
+    margin: 60px auto 0;
+    max-height: 352px;
+    max-width: 292px;
+    
+  }
+}
