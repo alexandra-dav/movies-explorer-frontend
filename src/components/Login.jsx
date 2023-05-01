@@ -1,31 +1,26 @@
 //  компонент страницы авторизации.
 import logo from "../images/logo.svg";
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useInput } from "../utils/validation";
+import { errorText } from "../utils/data";
 
-export default function Login({ onAuthorize }) {
-  const [data, setData] = useState({
-    email: "",
-    password: "",
-  });
-  const handlChange = (e) => {
-    const { name, value } = e.target;
-    setData({
-      ...data,
-      [name]: value,
-    });
+export default function Login({ onAuthorize, errorMessage, setErrorMessage }) {
+  const email = useInput("", { isEmpty: true, minLenght: 4, isEmail: true });
+  const password = useInput("", { isEmpty: true, minLenght: 3 });
+
+  const resetApiError = () => {
+    setErrorMessage("");
   };
   const handlSubmit = (e) => {
     e.preventDefault();
-    let { password, email } = data;
-    onAuthorize({ password, email });
+    onAuthorize({ password: password.value, email: email.value });
   };
 
   return (
     <main>
       <div className="register">
         <div className="register__box">
-          <Link to="/">
+          <Link to="/" onClick={resetApiError}>
             <img src={logo} alt="Логотип" className="register__logo" />
           </Link>
           <h1 className="register__title">Рады видеть!</h1>
@@ -44,15 +39,30 @@ export default function Login({ onAuthorize }) {
               type="email"
               id="loginEmail"
               name="email"
-              className="register__input register__input_form_email"
-              minLength="2"
+              className={`${
+                email.isDirty &&
+                (email.isEmpty || email.minLenghtError || email.isEmailError) &&
+                "validation__text_color"
+              } register__input`}
               maxLength="40"
               required
-              value={data.email}
-              onChange={handlChange}
-              placeholder="почта"
+              value={email.value}
+              onChange={email.onChange}
+              onBlur={email.onBlur}
+              onClick={resetApiError}
             />
-            <span className="loginEmail-error"></span>
+            <span
+              className={`${
+                email.isDirty &&
+                (email.isEmpty || email.minLenghtError || email.isEmailError) &&
+                "validation__text validation__text_color"
+              }`}
+            >
+              {email.isDirty &&
+              (email.isEmpty || email.minLenghtError || email.isEmailError)
+                ? errorText.inputSelector
+                : ""}
+            </span>
           </fieldset>
           <fieldset className="register__fieldset">
             <label htmlFor="loginPassword" className="register__label">
@@ -62,28 +72,57 @@ export default function Login({ onAuthorize }) {
               type="password"
               id="loginPassword"
               name="password"
-              className="register__input register__input_form_pass"
-              minLength="2"
+              className={`${
+                password.isDirty &&
+                (password.isEmpty || password.minLenghtError) &&
+                "validation__text_color"
+              } register__input`}
               maxLength="200"
               required
-              value={data.password}
-              onChange={handlChange}
-              placeholder="пароль"
+              value={password.value}
+              onChange={password.onChange}
+              onBlur={password.onBlur}
+              onClick={resetApiError}
             />
-            <span className="loginPass-error"></span>
+            <span
+              className={`${
+                password.isDirty &&
+                (password.isEmpty || password.minLenghtError) &&
+                "validation__text validation__text_color"
+              }`}
+            >
+              {password.isDirty && (password.isEmpty || password.minLenghtError)
+                ? errorText.inputSelector
+                : ""}
+            </span>
           </fieldset>
 
+          <span
+            className={`${
+              errorMessage && "validation__buttonError validation__text_color"
+            }`}
+          >
+            {errorMessage}
+          </span>
           <button
             aria-label="submit"
-            className="register__button register__button_singin"
+            className={`register__button register__button_singin ${
+              (!email.inputValid || !password.inputValid) &&
+              "validation__disabled validation__disabled_button"
+            }`}
             type="submit"
+            disabled={!email.inputValid || !password.inputValid}
           >
             Войти
           </button>
           <div>
             <p className="register__link">
               Ещё не зарегистрированы?{" "}
-              <Link to="/signup" className="register__link register__rout-link">
+              <Link
+                to="/signup"
+                className="register__link register__rout-link"
+                onClick={resetApiError}
+              >
                 Регистрация
               </Link>
             </p>

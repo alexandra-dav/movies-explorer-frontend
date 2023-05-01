@@ -90,3 +90,16 @@ export const initialCards = [
     image: "https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kholmogorsky-rayon.jpg",
   },
 ];
+
+// eslint-disable-next-line no-control-regex
+export const emailPattern = /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/iu;
+
+export const errorText = {
+  inputSelector: 'Что-то пошло не так...',
+  loginError404: "Вы ввели неправильный логин или пароль.",
+  loginError400: "При авторизации произошла ошибка. Переданный токен некорректен.",
+  loginError500: "При авторизации произошла ошибка. Токен не передан или передан не в том формате.",
+  emailError409: "Пользователь с таким email уже существует.",
+  registerError500: "При регистрации пользователя произошла ошибка.",
+  updateError500: "При обновлении профиля произошла ошибка.",
+}

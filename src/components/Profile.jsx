@@ -2,43 +2,51 @@
 import { Header } from "./Header";
 import { Link } from "react-router-dom";
 import { useState, useContext, useEffect } from "react";
+import { useInput } from "../utils/validation";
 import { CurrentUserContext } from "../utils/CurrentUserContext";
 
-export function Profile({ isLogin, onNavigationOpen, onLogout, onUpdateUser }) {
+export function Profile({
+  isLogin,
+  onNavigationOpen,
+  onLogout,
+  onUpdateUser,
+  errorMessage,
+  setErrorMessage,
+}) {
   const currentUser = useContext(CurrentUserContext);
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [title, setTitle] = useState("");
-  const [canEdit, setCanEdit] = useState(false);
-  function handleEdit() {
-    setCanEdit(!canEdit);
-  }
-  function handleChangeName(e) {
-    setName(e.target.value);
-  }
-  function handleChangeEmail(e) {
-    setEmail(e.target.value);
-  }
+  const [title, setTitle] = useState(`${currentUser.name}`);
 
+  const [isProfileForm, setIsProfileForm] = useState(true);
+  const name = useInput(`${currentUser.name}`, { isEmpty: true, minLenght: 2 });
+  const email = useInput(`${currentUser.email}`, {
+    isEmpty: true,
+    minLenght: 4,
+    isEmail: true,
+  });
+  const resetApiError = () => {
+    setErrorMessage("");
+  };
+  function handleEdit() {
+    setIsProfileForm(!isProfileForm);
+  }
   function handleSubmit(e) {
     // Запрещаем браузеру переходить по адресу формы
     e.preventDefault();
-
     handleEdit();
-    if (canEdit) {
-      setTitle(name);
+    if (!isProfileForm) {
+      setTitle(name.value);
       // Передаём значения управляемых компонентов во внешний обработчик
       onUpdateUser({
-        name,
-        email,
+        name: name.value,
+        email: email.value,
       });
     }
   }
   useEffect(() => {
-    setName(currentUser.name || "Иван");
-    setTitle(currentUser.name || "Иван");
-    setEmail(currentUser.email);
-  }, [currentUser]);
+    if (errorMessage) {
+      setIsProfileForm(false);
+    }
+  }, [errorMessage]);
 
   return (
     <>
@@ -46,6 +54,7 @@ export function Profile({ isLogin, onNavigationOpen, onLogout, onUpdateUser }) {
         router={false}
         isLogin={isLogin}
         onNavigationOpen={onNavigationOpen}
+        resetApiError={resetApiError}
       />
       <main>
         <section className="profile" aria-label="Страница изменения профиля">
@@ -63,16 +72,19 @@ export function Profile({ isLogin, onNavigationOpen, onLogout, onUpdateUser }) {
                 type="text"
                 id="profileName"
                 name="name"
-                className="profile__input profile__input_form_name"
+                className={`${
+                  name.isDirty &&
+                  (name.isEmpty || name.minLenghtError) &&
+                  "validation__text_color"
+                } profile__input profile__input_form_name`}
                 minLength="2"
                 maxLength="40"
                 required
-                readOnly={!canEdit}
-                value={name}
-                onChange={handleChangeName}
-                placeholder="имя"
+                readOnly={isProfileForm}
+                value={name.value}
+                onChange={name.onChange}
+                onBlur={name.onBlur}
               />
-              <span className="profileEmail-error"></span>
             </fieldset>
             <fieldset className="profile__fieldset">
               <label htmlFor="email" className="profile__label">
@@ -82,26 +94,41 @@ export function Profile({ isLogin, onNavigationOpen, onLogout, onUpdateUser }) {
                 type="email"
                 id="profileEmail"
                 name="email"
-                className={`profile__input profile__input_form_email ${
-                  canEdit ? "profile__input_edit" : ""
-                }`}
+                className={`${
+                  email.isDirty &&
+                  (email.isEmpty ||
+                    email.minLenghtError ||
+                    email.isEmailError) &&
+                  "validation__text_color"
+                } profile__input profile__input_form_email`}
                 minLength="2"
                 maxLength="40"
                 required
-                readOnly={!canEdit}
-                value={email}
-                onChange={handleChangeEmail}
-                placeholder="почта"
+                readOnly={isProfileForm}
+                value={email.value}
+                onChange={email.onChange}
+                onBlur={email.onBlur}
+                onClick={resetApiError}
               />
-              <span className="profileEmail-error"></span>
             </fieldset>
+
+            <span
+              className={`${
+                errorMessage && "validation__buttonError validation__text_color"
+              }`}
+            >
+              {errorMessage}
+            </span>
             <button
               aria-label="submit"
-              className="profile__button"
+              className={`profile__button ${
+                (!name.inputValid || !email.inputValid || errorMessage) &&
+                "validation__disabled"
+              }`}
               type="submit"
-              disabled={!(name && email)}
+              disabled={!name.inputValid || !email.inputValid || errorMessage}
             >
-              {canEdit ? "Сохранить" : "Редактировать"}
+              {isProfileForm ? "Редактировать" : "Сохранить"}
             </button>
           </form>
           <div>
@@ -109,7 +136,10 @@ export function Profile({ isLogin, onNavigationOpen, onLogout, onUpdateUser }) {
               <Link
                 to="/signin"
                 className="register__link register__link_pink register__rout-link"
-                onClick={onLogout}
+                onClick={() => {
+                  onLogout();
+                  resetApiError();
+                }}
               >
                 Выйти из аккаунта
               </Link>

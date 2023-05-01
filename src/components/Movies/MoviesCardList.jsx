@@ -12,10 +12,15 @@ export function MoviesCardList(props) {
               props.onCardDelete(cardData);
             }}
             myMovies={props.myMovies}
+            countCard={props.countCard}
           />
         ))}
       </section>
-      <button aria-label="more-movies" className="landing__button landing__button_movies">
+      <button
+        aria-label="more-movies"
+        className="landing__button landing__button_movies"
+        onClick={props.handleExtraCard}
+      >
         Ещё
       </button>
     </>

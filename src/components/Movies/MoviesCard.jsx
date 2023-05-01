@@ -1,17 +1,36 @@
 // компонент одной карточки фильма.
-import { useState } from "react";
+import { useState, } from "react";
 
-export function MoviesCard({ card, onCardDelete, myMovies }) {
+export function MoviesCard({ card, onCardDelete, myMovies, countCard }) {
   const [isLiked, setLike] = useState(false);
+  // кол-во максимально возможного числа катрочек на странице
+
+
   function handleCardLike() {
     setLike(!isLiked);
   }
   return (
-    <article className="cards__container" key={card.id}>
-      <img className="cards__image" src={card.image} alt={card.nameRU} />
+    <article
+      className="cards__container"
+      key={card.id}
+      style={{ display: (card.id > countCard) ? "none" : "block" }}
+    >
+      {console.log(card.id)}
+      <img
+        className="cards__image"
+        src={`https://api.nomoreparties.co/${card.image.url}`}
+        alt={card.nameRU}
+      />
       <div className="cards__info">
         <h2 className="cards__name">{`${card.nameRU}`}</h2>
-        <p className="cards__duration">{(`${parseInt(card.duration/60) ? (`${parseInt(card.duration/60)}ч`) : ("")}`)}{` ${parseInt(card.duration%60)}м`}</p>
+        <p className="cards__duration">
+          {`${
+            parseInt(card.duration / 60)
+              ? `${parseInt(card.duration / 60)}ч`
+              : ""
+          }`}
+          {` ${parseInt(card.duration % 60)}м`}
+        </p>
         {myMovies ? (
           <button
             aria-label="delete"

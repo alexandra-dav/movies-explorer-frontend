@@ -1,32 +1,32 @@
 // компонент страницы регистрации.
 import logo from "../images/logo.svg";
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { errorText } from "../utils/data";
+import { useInput } from "../utils/validation";
 
-function Register({ onRegister }) {
-  const [data, setData] = useState({
-    name: "",
-    email: "",
-    password: "",
-  });
-  const handlChange = (e) => {
-    const { name, value } = e.target;
-    setData({
-      ...data,
-      [name]: value,
-    });
-  };
+function Register({ onRegister, errorMessage, setErrorMessage }) {
+  const name = useInput("", { isEmpty: true, minLenght: 2 });
+  const email = useInput("", { isEmpty: true, minLenght: 4, isEmail: true});
+  const password = useInput("", { isEmpty: true, minLenght: 3 });
+
+  const resetApiError = () => {
+    setErrorMessage('');
+  }
   const handlSubmit = (e) => {
     e.preventDefault();
-    let { password, email } = data;
-    onRegister({ password, email });
+    onRegister({
+      name: name.value,
+      password: password.value,
+      email: email.value,
+    });
+    setErrorMessage('');
   };
 
   return (
     <main>
       <div className="register">
         <div className="register__box">
-          <Link to="/">
+          <Link to="/" onClick={resetApiError}>
             <img src={logo} alt="Логотип" className="register__logo" />
           </Link>
           <h1 className="register__title">Добро пожаловать!</h1>
@@ -45,15 +45,29 @@ function Register({ onRegister }) {
               type="text"
               id="loginName"
               name="name"
-              className="register__input register__input_form_name"
+              className={`${
+                name.isDirty &&
+                (name.isEmpty || name.minLenghtError) &&
+                "validation__text_color"
+              } register__input`}
               minLength="2"
               maxLength="40"
               required
-              value={data.name}
-              onChange={handlChange}
-              placeholder="имя"
+              value={name.value}
+              onChange={name.onChange}
+              onBlur={name.onBlur}
             />
-            <span className="registerEmail-error"></span>
+            <span
+              className={`${
+                name.isDirty &&
+                (name.isEmpty || name.minLenghtError) &&
+                "validation__text validation__text_color"
+              }`}
+            >
+              {name.isDirty && (name.isEmpty || name.minLenghtError)
+                ? errorText.inputSelector
+                : ""}
+            </span>
           </fieldset>
           <fieldset className="register__fieldset">
             <label htmlFor="loginEmail" className="register__label">
@@ -63,15 +77,29 @@ function Register({ onRegister }) {
               type="email"
               id="loginEmail"
               name="email"
-              className="register__input register__input_form_email"
-              minLength="2"
+              className={`${
+                email.isDirty &&
+                (email.isEmpty || email.minLenghtError || email.isEmailError ) &&
+                "validation__text_color"
+              } register__input`}
               maxLength="40"
               required
-              value={data.email}
-              onChange={handlChange}
-              placeholder="почта"
+              value={email.value}
+              onChange={email.onChange}
+              onBlur={email.onBlur}
+              onClick={resetApiError}
             />
-            <span className="registerEmail-error"></span>
+            <span
+              className={`${
+                email.isDirty &&
+                (email.isEmpty || email.minLenghtError || email.isEmailError) &&
+                "validation__text validation__text_color"
+              }`}
+            >
+              {email.isDirty && (email.isEmpty || email.minLenghtError || email.isEmailError)
+                ? errorText.inputSelector
+                : ""}
+            </span>
           </fieldset>
           <fieldset className="register__fieldset">
             <label htmlFor="loginPassword" className="register__label">
@@ -81,27 +109,57 @@ function Register({ onRegister }) {
               type="password"
               id="loginPassword"
               name="password"
-              className="register__input  register__input_form_pass"
+              className={`${
+                password.isDirty &&
+                (password.isEmpty || password.minLenghtError) &&
+                "validation__text_color"
+              } register__input`}
               minLength="2"
               maxLength="200"
               required
-              value={data.password}
-              onChange={handlChange}
-              placeholder="пароль"
+              value={password.value}
+              onChange={password.onChange}
+              onBlur={password.onBlur}
             />
-            <span className="registerName-error"></span>
+            <span
+              className={`${
+                password.isDirty &&
+                (password.isEmpty || password.minLenghtError) &&
+                "validation__text validation__text_color"
+              }`}
+            >
+              {password.isDirty && (password.isEmpty || password.minLenghtError)
+                ? errorText.inputSelector
+                : ""}
+            </span>
           </fieldset>
+
+          <span
+            className={`${
+              (errorMessage) && "validation__buttonError validation__text_color"
+            }`}
+          >
+            {errorMessage
+                ? errorMessage
+                : ""}
+          </span>
           <button
             aria-label="submit"
-            className="register__button"
+            className={`register__button ${
+              (!name.inputValid || !email.inputValid || !password.inputValid) &&
+              "validation__disabled validation__disabled_button"
+            }`}
             type="submit"
+            disabled={
+              !name.inputValid || !email.inputValid || !password.inputValid
+            }
           >
             Зарегистрироваться
           </button>
           <div>
             <p className="register__link">
               Уже зарегистрированы?{" "}
-              <Link to="/signin" className="register__link register__rout-link">
+              <Link to="/signin" className="register__link register__rout-link" onClick={resetApiError}>
                 Войти
               </Link>
             </p>
