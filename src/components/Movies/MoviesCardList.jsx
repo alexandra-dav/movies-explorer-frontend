@@ -11,18 +11,14 @@ export function MoviesCardList(props) {
             onCardDelete={() => {
               props.onCardDelete(cardData);
             }}
+            onCardLike={() => {
+              props.onCardLike(cardData);
+            }}
             myMovies={props.myMovies}
-            countCard={props.countCard}
+            filterShortMovies={props.filterShortMovies}
           />
         ))}
-      </section>
-      <button
-        aria-label="more-movies"
-        className="landing__button landing__button_movies"
-        onClick={props.handleExtraCard}
-      >
-        Ещё
-      </button>
+      </section>      
     </>
   );
 }

@@ -50,7 +50,7 @@ class Auth {
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
-        Authorization: `Bearer ${jwt}`,
+        "Authorization": `Bearer ${jwt}`,
       },
     }).then(this._getResponseData);
   }
@@ -60,6 +60,6 @@ export const auth = new Auth({
   baseUrl: "http://localhost:3000",
   headers: {
     "Content-Type": "application/json",
-    Accept: "application/json",
+    "Accept": "application/json",
   },
 });

@@ -5,3 +5,4 @@ export const userContext = {
     password: ""
 };
 export const CurrentUserContext = React.createContext();
+export const CurrentUsersMoviesContext = React.createContext();

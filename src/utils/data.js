@@ -1,4 +1,4 @@
-export const initialCards = [
+/* export const initialCards = [
   {
     id: 1,
     nameRU: "«Роллинг Стоунз» в изгнании",
@@ -90,7 +90,7 @@ export const initialCards = [
     image: "https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kholmogorsky-rayon.jpg",
   },
 ];
-
+export const initialCardCurrentUser = []; */
 // eslint-disable-next-line no-control-regex
 export const emailPattern = /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/iu;
 

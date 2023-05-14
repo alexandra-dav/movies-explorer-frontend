@@ -1,24 +1,36 @@
-/* форма поиска, куда пользователь будет вводить запрос.
-Обратите внимание на фильтр с чекбоксом «Только короткометражки».
-Для него можно воспользоваться отдельным управляемым компонентом FilterCheckbox. */
 import loupe from "../../images/icon-loupe.svg";
 import find from "../../images/find.svg";
 import filteron from "../../images/smalltumb-on.svg";
 import filteroff from "../../images/smalltumb-off.svg";
-import { useState } from "react";
+// import { useInput } from "../../utils/validation";
+import { useEffect, useState } from "react";
 
-export function SearchForm() {
-  const [filterMovies, setFilterMovies] = useState(false);
-  function handleFilter() {
-    setFilterMovies(!filterMovies);
-  }
+export function SearchForm({
+  handleOnlyShortMovies,
+  filterMovies,
+  setFilterString,
+}) {
+  const [search, setSearch] = useState("");
+  const handlSubmit = (e) => {
+    e.preventDefault();
+    setFilterString(search);
+  };
+  const hanleChangeSearch = (e) => {
+    setSearch(e.target.value);
+  };
+  useEffect(() => {
+    const savedSearch = localStorage.getItem("search");
+
+    if (savedSearch) {
+      setFilterString(savedSearch);
+      setSearch(savedSearch);
+    }
+  }, []);
+
   return (
     <section className="movies" aria-label="Страница с сохраненными фильмами">
-      <form
-        className="movies__form"
-        /* onSubmit={handlSubmit} */
-      >
-        <div className="movies__main">
+      <div className="movies__form">
+        <form className="movies__main" onSubmit={handlSubmit}>
           <img
             src={loupe}
             alt="Лупа"
@@ -30,26 +42,28 @@ export function SearchForm() {
             id="movies"
             name="movies"
             placeholder="Фильм"
+            value={search}
+            onChange={hanleChangeSearch}
             required
           />
-          <button className="movies__find">
+          <button aria-label="submit" className="movies__find" type="submit">
             <img
               src={find}
               alt="Поиск"
               className="movies__logo movies__logo_find"
             />
           </button>
-        </div>
+        </form>
         <div className="movies__filter">
           <img
             src={`${filterMovies ? filteron : filteroff}`}
-            onClick={handleFilter}
+            onClick={handleOnlyShortMovies}
             className="movies__logo movies__logo_filter"
             alt="Фильтр"
           />
           <p className="movies__tittle-filter">Короткометражки</p>
         </div>
-      </form>
+      </div>
     </section>
   );
 }

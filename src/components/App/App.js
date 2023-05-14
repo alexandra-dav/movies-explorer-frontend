@@ -14,8 +14,11 @@ import { Profile } from "../Profile";
 import { auth } from "../../utils/auth";
 import { mainApi } from "../../utils/MainApi";
 import { moviesApi } from "../../utils/MoviesApi";
-import { CurrentUserContext } from "../../utils/CurrentUserContext";
-import { initialCards, errorText } from "../../utils/data";
+import {
+  CurrentUserContext,
+  CurrentUsersMoviesContext,
+} from "../../utils/CurrentUserContext";
+import { errorText } from "../../utils/data";
 
 function App() {
   const [currentUser, setCurrentUser] = useState("");
@@ -26,7 +29,7 @@ function App() {
   const [isNavigationOpen, setNavigationOpen] = useState(false);
   const [isNavTabOpen, setNavTabOpen] = useState(false);
 
-  const [card, setCard] = useState(initialCards);
+  const [card, setCard] = useState([]);
   const [cardCurrentUser, setCardCurrentUser] = useState([]);
 
   function handleAuthorize(data) {
@@ -65,6 +68,7 @@ function App() {
           navigate("/movies", { replace: true });
           isLoggedIn(true);
           localStorage.setItem("jwt", res.token);
+          mainApi.setToken(res.token);
           setCurrentUser(data);
         }
       })
@@ -85,7 +89,7 @@ function App() {
   function handleUpdateUser(newDataProfile) {
     mainApi
       .patchUserInfo(newDataProfile)
-      .then((res) => {
+      .then(() => {
         navigate("/profile");
         setCurrentUser(newDataProfile);
       })
@@ -106,7 +110,9 @@ function App() {
   function handleLogOut() {
     isLoggedIn(false);
     localStorage.removeItem("jwt");
-    // navigate("/signin");
+    localStorage.removeItem("search");
+    localStorage.removeItem("isShort");
+    mainApi.removeToken();
   }
   function handleClikButtunClose(evt) {
     if (
@@ -125,7 +131,44 @@ function App() {
     setNavTabOpen(!isNavTabOpen);
   }
   function handleDeleteCard(card) {
-    setCard((state) => state.filter((c) => c.id !== card.id));
+    mainApi
+      .deleteCard(card._id)
+      .then(() => {
+        setCardCurrentUser((state) => state.filter((c) => c._id !== card._id));
+      })
+      .catch((err) =>
+        console.log("Ошибка: ", err, " код ошибки: ", err.status)
+      );
+  }
+  function handleCardLike(card) {
+    const findeMovies = cardCurrentUser.find((e) => e.movieId === card.id);
+    // Отправляем запрос в API и получаем обновлённые данные карточки
+    if (!Boolean(findeMovies)) {
+      mainApi
+        .likeMovie({
+          country: card.country,
+          director: card.director,
+          duration: card.duration,
+          year: card.year,
+          description: card.description,
+          image: `https://api.nomoreparties.co${card.image.url}`,
+          trailerLink: card.trailerLink,
+          thumbnail: `https://api.nomoreparties.co${card.image.formats.thumbnail.url}`,
+          movieId: card.id,
+          nameRU: card.nameRU,
+          nameEN: card.nameEN,
+        })
+        .then((newMovie) => {
+          const moviesArray = cardCurrentUser;
+          moviesArray.push(newMovie);
+          setCardCurrentUser(moviesArray);
+        })
+        .catch((err) =>
+          console.log("Ошибка: ", err, " код ошибки: ", err.status)
+        );
+    } else {
+      handleDeleteCard(findeMovies);
+    }
   }
 
   useEffect(() => {
@@ -136,8 +179,9 @@ function App() {
         .then((res) => {
           if (res) {
             isLoggedIn(true);
+            navigate("/");
+            mainApi.setToken(jwt);
             auth.userData(jwt).then((userData) => setCurrentUser(userData));
-            // navigate("/");
           }
         })
         .catch((err) =>
@@ -155,102 +199,116 @@ function App() {
     }
   }, [loggedIn]);
 
-  // загрузка крточек с beatfilm-movies 
+  // загрузка крточек с beatfilm-movies
   useEffect(() => {
-    if(loggedIn){
+    if (loggedIn) {
       moviesApi
-      .getInitialCards()
-      .then((cardData) => {
-        setCard(cardData);
-      })
-      .catch((err) =>
-        console.log("Ошибка: ", err, " код ошибки: ", err.status)
-      );
+        .getInitialCards()
+        .then((cardData) => {
+          setCard(cardData);
+        })
+        .catch((err) =>
+          console.log("Ошибка: ", err, " код ошибки: ", err.status)
+        );
+      mainApi
+        .getUserMovies()
+        .then((movieData) => {
+          setCardCurrentUser(movieData);
+        })
+        .catch((err) =>
+          console.log("Ошибка: ", err, " код ошибки: ", err.status)
+        );
     }
   }, [loggedIn]);
 
   return (
     <>
       <CurrentUserContext.Provider value={currentUser}>
-        <Routes>
-          <Route
-            path="/signin"
-            element={
-              <Login
-                onAuthorize={handleAuthorize}
-                errorMessage={errorMessage}
-                setErrorMessage={setErrorMessage}
-              />
-            }
-          />
-          <Route
-            path="/signup"
-            element={
-              <Register
-                onRegister={handleRegister}
-                errorMessage={errorMessage}
-                setErrorMessage={setErrorMessage}
-              />
-            }
-          />
-          <Route
-            path="/movies"
-            element={
-              <ProtectedRoute loggedIn={loggedIn}>
-                <Movies
-                  onNavigationOpen={handleNavigationClick}
-                  isLogin={loggedIn}
-                  card={card}
-                  onCardDelete={handleDeleteCard}
-                />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/saved-movies"
-            element={
-              <ProtectedRoute loggedIn={loggedIn}>
-                <SavedMovies
-                  onNavigationOpen={handleNavigationClick}
-                  isLogin={loggedIn}
-                  card={cardCurrentUser}
-                  onCardDelete={handleDeleteCard}
-                />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/profile"
-            element={
-              <ProtectedRoute loggedIn={loggedIn}>
-                <Profile
-                  isLogin={loggedIn}
-                  onNavigationOpen={handleNavigationClick}
-                  onLogout={handleLogOut}
-                  onUpdateUser={handleUpdateUser}
+        <CurrentUsersMoviesContext.Provider value={cardCurrentUser}>
+          <Routes>
+            <Route
+              path="/signin"
+              element={
+                <Login
+                  onAuthorize={handleAuthorize}
                   errorMessage={errorMessage}
                   setErrorMessage={setErrorMessage}
                 />
-              </ProtectedRoute>
-            }
+              }
+            />
+            <Route
+              path="/signup"
+              element={
+                <Register
+                  onRegister={handleRegister}
+                  errorMessage={errorMessage}
+                  setErrorMessage={setErrorMessage}
+                />
+              }
+            />
+            <Route
+              path="/movies"
+              element={
+                <ProtectedRoute loggedIn={loggedIn}>
+                  <Movies
+                    onNavigationOpen={handleNavigationClick}
+                    isLogin={loggedIn}
+                    card={card}
+                    onCardDelete={handleDeleteCard}
+                    onCardLike={handleCardLike}
+                    myMovies={false}
+                  />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/saved-movies"
+              element={
+                <ProtectedRoute loggedIn={loggedIn}>
+                  <SavedMovies
+                    onNavigationOpen={handleNavigationClick}
+                    isLogin={loggedIn}
+                    card={cardCurrentUser}
+                    onCardDelete={handleDeleteCard}
+                    onCardLike={handleCardLike}
+                  />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/profile"
+              element={
+                <ProtectedRoute loggedIn={loggedIn}>
+                  <Profile
+                    isLogin={loggedIn}
+                    onNavigationOpen={handleNavigationClick}
+                    onLogout={handleLogOut}
+                    onUpdateUser={handleUpdateUser}
+                    errorMessage={errorMessage}
+                    setErrorMessage={setErrorMessage}
+                  />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/"
+              element={
+                <Main
+                  onNavigationOpen={handleNavigationClick}
+                  onNavTabOpen={handleNavTabClick}
+                  isLogin={loggedIn}
+                />
+              }
+            />
+            <Route path="*" element={<Notfoundpage />} />
+          </Routes>
+
+          <Navigation
+            isOpen={isNavigationOpen}
+            onClose={handleClikButtunClose}
           />
-
-          <Route
-            path="/"
-            element={
-              <Main
-                onNavigationOpen={handleNavigationClick}
-                onNavTabOpen={handleNavTabClick}
-                isLogin={loggedIn}
-              />
-            }
-          />
-
-          <Route path="*" element={<Notfoundpage />} />
-        </Routes>
-
-        <Navigation isOpen={isNavigationOpen} onClose={handleClikButtunClose} />
-        <NavTab isOpen={isNavTabOpen} onClose={handleClikButtunClose} />
+          <NavTab isOpen={isNavTabOpen} onClose={handleClikButtunClose} />
+        </CurrentUsersMoviesContext.Provider>
       </CurrentUserContext.Provider>
     </>
   );

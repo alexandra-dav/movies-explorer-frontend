@@ -1,26 +1,22 @@
-// компонент страницы с сохранёнными карточками фильмов.
-import { Header } from "../Header";
-import { MoviesCardList } from "../Movies/MoviesCardList";
-import { SearchForm } from "../Movies/SearchForm";
-import { Footer } from "../Footer";
+import { Movies } from "../Movies/Movies";
 
-export function SavedMovies({ isLogin, onNavigationOpen, card, onCardDelete }) {
+export function SavedMovies({
+  onNavigationOpen,
+  isLogin,  
+  card,
+  onCardDelete,
+  onCardLike,
+}) {
   return (
     <>
-      <Header
-        router={false}
-        isLogin={isLogin}
+      <Movies
         onNavigationOpen={onNavigationOpen}
+        isLogin={isLogin}
+        card={card}
+        onCardDelete={onCardDelete}
+        onCardLike={onCardLike}
+        myMovies={true}
       />
-      <main>
-        <SearchForm />
-        <MoviesCardList
-          onCardDelete={onCardDelete}
-          card={card}
-          myMovies={true}
-        />
-      </main>
-      <Footer />
     </>
   );
 }
