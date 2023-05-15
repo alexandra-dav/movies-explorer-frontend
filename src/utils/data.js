@@ -103,3 +103,6 @@ export const errorText = {
   registerError500: "При регистрации пользователя произошла ошибка.",
   updateError500: "При обновлении профиля произошла ошибка.",
 }
+
+// export const BASE_URL = "http://localhost:3000";
+export const BASE_URL = "https://api.your.movies.nomoredomains.work";

@@ -1,3 +1,4 @@
+import {BASE_URL} from './data';
 class Auth {
   constructor(config) {
     // тело конструктора
@@ -57,7 +58,7 @@ class Auth {
 }
 
 export const auth = new Auth({
-  baseUrl: "http://localhost:3000",
+  baseUrl: BASE_URL,
   headers: {
     "Content-Type": "application/json",
     "Accept": "application/json",

@@ -9,4 +9,9 @@ https://github.com/alexandra-dav/movies-explorer-frontend/pull/2
 ### `npm run build`
 ### `npm start`
 
-Пока можно посмотреть локально [http://localhost:3000](http://localhost:3000).
+URL сервера:
+- IP: 158.160.45.245
+- Frontend https://your.movies.nomoredomains.work
+- Backend https://api.your.movies.nomoredomains.work
+
+Также можно посмотреть локально [http://localhost:3000](http://localhost:3000).

@@ -1,3 +1,4 @@
+import {BASE_URL} from './data';
 class MainApi {
   constructor(config) {
     // тело конструктора
@@ -71,7 +72,7 @@ class MainApi {
 }
 
 export const mainApi = new MainApi({
-  baseUrl: "http://localhost:3000",
+  baseUrl: BASE_URL,
   headers: {
     "Content-Type": "application/json",
     Accept: "application/json",
