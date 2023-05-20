@@ -39,7 +39,7 @@ function App() {
         if (res.token) {
           localStorage.setItem("jwt", res.token);
           isLoggedIn(true);
-          navigate("/");
+          navigate("/movies");
           auth.userData(res.token).then((userData) => setCurrentUser(userData));
           setErrorMessage("");
         }
@@ -179,7 +179,6 @@ function App() {
         .then((res) => {
           if (res) {
             isLoggedIn(true);
-            navigate("/");
             mainApi.setToken(jwt);
             auth.userData(jwt).then((userData) => setCurrentUser(userData));
           }
