@@ -18,7 +18,7 @@ export function Profile({
   const currentUser = useContext(CurrentUserContext);
   const [title, setTitle] = useState(`${currentUser.name}`);
 
-  const [isProfileForm, setIsProfileForm] = useState(true);
+  const [isProfileForm, setIsProfileForm] = useState(true); // мы на странице просмотра профиля или редактирования?
   const name = useInput(`${currentUser.name}`, { isEmpty: true, minLenght: 2 });
   const email = useInput(`${currentUser.email}`, {
     isEmpty: true,
@@ -29,6 +29,16 @@ export function Profile({
     setOkMessage("");
     setErrorMessage("");
   };
+  function checkData() {
+    if (
+      (currentUser.name === name.value && currentUser.email === email.value) ||
+      (!!(!name.inputValid || !email.inputValid || errorMessage))      
+    ) {
+      return true;
+    } else {
+      return false;
+    }
+  }
   function handleEdit() {
     setIsProfileForm(!isProfileForm);
   }
@@ -128,11 +138,10 @@ export function Profile({
             <button
               aria-label="submit"
               className={`profile__button ${
-                (!name.inputValid || !email.inputValid || errorMessage) &&
-                "validation__disabled"
+                (checkData() && !isProfileForm) && "validation__disabled"
               }`}
               type="submit"
-              disabled={!name.inputValid || !email.inputValid || errorMessage}
+              disabled={!isProfileForm && checkData()}
             >
               {isProfileForm ? "Редактировать" : "Сохранить"}
             </button>
