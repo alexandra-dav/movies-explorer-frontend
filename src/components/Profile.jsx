@@ -12,6 +12,8 @@ export function Profile({
   onUpdateUser,
   errorMessage,
   setErrorMessage,
+  okMessage,
+  setOkMessage,
 }) {
   const currentUser = useContext(CurrentUserContext);
   const [title, setTitle] = useState(`${currentUser.name}`);
@@ -23,7 +25,8 @@ export function Profile({
     minLenght: 4,
     isEmail: true,
   });
-  const resetApiError = () => {
+  const resetAllMessage = () => {
+    setOkMessage("");
     setErrorMessage("");
   };
   function handleEdit() {
@@ -47,6 +50,10 @@ export function Profile({
       setIsProfileForm(false);
     }
   }, [errorMessage]);
+  useEffect(() => {
+    document.addEventListener("mousedown", resetAllMessage);
+    return () => document.removeEventListener("mousedown", resetAllMessage);
+  });
 
   return (
     <>
@@ -54,7 +61,6 @@ export function Profile({
         router={false}
         isLogin={isLogin}
         onNavigationOpen={onNavigationOpen}
-        resetApiError={resetApiError}
       />
       <main>
         <section className="profile" aria-label="Страница изменения профиля">
@@ -108,16 +114,16 @@ export function Profile({
                 value={email.value}
                 onChange={email.onChange}
                 onBlur={email.onBlur}
-                onClick={resetApiError}
               />
             </fieldset>
 
             <span
               className={`${
-                errorMessage && "validation__buttonError validation__text_color"
+                (errorMessage || okMessage) &&
+                "validation__buttonError validation__text_color"
               }`}
             >
-              {errorMessage}
+              {errorMessage || okMessage}
             </span>
             <button
               aria-label="submit"
@@ -136,10 +142,7 @@ export function Profile({
               <Link
                 to="/signin"
                 className="register__link register__link_pink register__rout-link"
-                onClick={() => {
-                  onLogout();
-                  resetApiError();
-                }}
+                onClick={onLogout}
               >
                 Выйти из аккаунта
               </Link>

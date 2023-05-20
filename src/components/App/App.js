@@ -18,12 +18,13 @@ import {
   CurrentUserContext,
   CurrentUsersMoviesContext,
 } from "../../utils/CurrentUserContext";
-import { errorText } from "../../utils/data";
+import { errorText, massageText } from "../../utils/data";
 
 function App() {
   const [currentUser, setCurrentUser] = useState("");
   const navigate = useNavigate();
   const [errorMessage, setErrorMessage] = useState("");
+  const [okMessage, setOkMessage] = useState("");
 
   const [loggedIn, isLoggedIn] = useState(false);
   const [isNavigationOpen, setNavigationOpen] = useState(false);
@@ -92,6 +93,7 @@ function App() {
       .then(() => {
         navigate("/profile");
         setCurrentUser(newDataProfile);
+        setOkMessage(massageText.changeDataProfile);
       })
       .catch((err) => {
         switch (err) {
@@ -285,6 +287,8 @@ function App() {
                     onUpdateUser={handleUpdateUser}
                     errorMessage={errorMessage}
                     setErrorMessage={setErrorMessage}
+                    okMessage={okMessage}
+                    setOkMessage={setOkMessage}
                   />
                 </ProtectedRoute>
               }
