@@ -124,7 +124,7 @@ export function Movies({
         ) : (
           <>
             <section className="cards" aria-label="Галлерея" id="cards">
-              <div>Ничего не найдено</div>
+              <h2 className="notfound__title">Ничего не найдено</h2>
             </section>
           </>
         )}
