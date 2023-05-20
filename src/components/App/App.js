@@ -21,10 +21,11 @@ import {
 import { errorText, massageText } from "../../utils/data";
 
 function App() {
-  const [currentUser, setCurrentUser] = useState("");
+  const [currentUser, setCurrentUser] = useState({});
   const navigate = useNavigate();
   const state = useLocation();
   const [errorMessage, setErrorMessage] = useState("");
+  const [apiErrorMessage, setApiErrorMessage] = useState("");
   const [okMessage, setOkMessage] = useState("");
 
   const [loggedIn, isLoggedIn] = useState(false);
@@ -49,15 +50,19 @@ function App() {
       .catch((err) => {
         switch (err) {
           case "Ошибка: 400":
-            setErrorMessage(errorText.loginError400);
+            setErrorMessage(errorText.LOGINERROR400);
             break;
           case "Ошибка: 404":
-            setErrorMessage(errorText.loginError404);
+            setErrorMessage(errorText.LOGINERROR404);
             break;
           case "Ошибка: 500":
-            setErrorMessage(errorText.loginError500);
+            setErrorMessage(errorText.LOGINERROR500);
+            break;
+          case "Ошибка: 429":
+            setErrorMessage(errorText.ERROR429);
             break;
           default:
+            setErrorMessage(errorText.UNOTHER);
             break;
         }
       });
@@ -77,12 +82,16 @@ function App() {
       .catch((err) => {
         switch (err) {
           case "Ошибка: 409":
-            setErrorMessage(errorText.emailError409);
+            setErrorMessage(errorText.EMAILERROR409);
             break;
           case "Ошибка: 500":
-            setErrorMessage(errorText.registerError500);
+            setErrorMessage(errorText.REGISTERERROR500);
+            break;
+          case "Ошибка: 429":
+            setErrorMessage(errorText.ERROR429);
             break;
           default:
+            setErrorMessage(errorText.UNOTHER);
             break;
         }
         console.log(err);
@@ -94,17 +103,21 @@ function App() {
       .then(() => {
         navigate("/profile");
         setCurrentUser(newDataProfile);
-        setOkMessage(massageText.changeDataProfile);
+        setOkMessage(massageText.CHANGEDATAPROFILE);
       })
       .catch((err) => {
         switch (err) {
           case "Ошибка: 409":
-            setErrorMessage(errorText.emailError409);
+            setErrorMessage(errorText.EMAILERROR409);
             break;
           case "Ошибка: 500":
-            setErrorMessage(errorText.updateError500);
+            setErrorMessage(errorText.UPDATEERROR500);
+            break;
+          case "Ошибка: 429":
+            setErrorMessage(errorText.ERROR429);
             break;
           default:
+            setErrorMessage(errorText.UNOTHER);
             break;
         }
         console.log(err);
@@ -140,9 +153,10 @@ function App() {
       .then(() => {
         setCardCurrentUser((state) => state.filter((c) => c._id !== card._id));
       })
-      .catch((err) =>
-        console.log("Ошибка: ", err, " код ошибки: ", err.status)
-      );
+      .catch((err) => {
+        setApiErrorMessage(errorText.UNOTHER);
+        console.log(err, apiErrorMessage);
+      });
   }
   function handleCardLike(card) {
     const findeMovies = cardCurrentUser.find((e) => e.movieId === card.id);
@@ -167,9 +181,10 @@ function App() {
           moviesArray.push(newMovie);
           setCardCurrentUser(moviesArray);
         })
-        .catch((err) =>
-          console.log("Ошибка: ", err, " код ошибки: ", err.status)
-        );
+        .catch((err) => {
+          setApiErrorMessage(errorText.UNOTHER);
+          console.log(err, apiErrorMessage);
+        });
     } else {
       handleDeleteCard(findeMovies);
     }
@@ -178,26 +193,24 @@ function App() {
   useEffect(() => {
     if (localStorage.getItem("jwt")) {
       const jwt = localStorage.getItem("jwt");
+      console.log(jwt);
       auth
         .checkToken(jwt)
         .then((res) => {
           if (res) {
-            navigate(state.pathname);
             isLoggedIn(true);
             mainApi.setToken(jwt);
-            auth.userData(jwt).then((userData) => setCurrentUser(userData));
+            auth.userData(jwt).then((userData) => {
+              setCurrentUser(userData);
+              console.log(userData, "currentUser: ", currentUser);
+            });
+            navigate(state.pathname);
           }
         })
-        .catch((err) =>
-          console.log(
-            "Ошибка: ",
-            err,
-            " код ошибки: ",
-            err.status,
-            "текст: ",
-            err.message
-          )
-        );
+        .catch((err) => {
+          setApiErrorMessage(errorText.UNOTHER);
+          console.log(err, apiErrorMessage);
+        });
     } else {
       handleLogOut();
     }
@@ -211,17 +224,21 @@ function App() {
         .then((cardData) => {
           setCard(cardData);
         })
-        .catch((err) =>
-          console.log("Ошибка: ", err, " код ошибки: ", err.status)
-        );
-      mainApi
-        .getUserMovies()
-        .then((movieData) => {
-          setCardCurrentUser(movieData);
-        })
-        .catch((err) =>
-          console.log("Ошибка: ", err, " код ошибки: ", err.status)
-        );
+        .catch((err) => {
+          setApiErrorMessage(errorText.UNOTHER);
+          console.log(err, apiErrorMessage);
+        });
+      if (localStorage.getItem("jwt")) {
+        mainApi
+          .getUserMovies()
+          .then((movieData) => {
+            setCardCurrentUser(movieData);
+          })
+          .catch((err) => {
+            setApiErrorMessage(errorText.UNOTHER);
+            console.log(err, apiErrorMessage);
+          });
+      }
     }
   }, [loggedIn]);
 
