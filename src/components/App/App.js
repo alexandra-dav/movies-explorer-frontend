@@ -1,9 +1,9 @@
 import React from "react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useLayoutEffect } from "react";
 import { Main } from "../Main/Main";
 import Login from "../Login";
 import Register from "../Register";
-import { Route, Routes, useNavigate } from "react-router-dom";
+import { Route, Routes, useNavigate, useLocation } from "react-router-dom";
 import ProtectedRoute from "../ProtectedRoute/ProtectedRoute";
 import { Navigation } from "../Navigation";
 import { NavTab } from "../Main/NavTab";
@@ -23,6 +23,7 @@ import { errorText, massageText } from "../../utils/data";
 function App() {
   const [currentUser, setCurrentUser] = useState("");
   const navigate = useNavigate();
+  const state = useLocation();
   const [errorMessage, setErrorMessage] = useState("");
   const [okMessage, setOkMessage] = useState("");
 
@@ -115,7 +116,7 @@ function App() {
     localStorage.removeItem("search");
     localStorage.removeItem("isShort");
     mainApi.removeToken();
-    navigate('/');
+    navigate("/");
   }
   function handleClikButtunClose(evt) {
     if (
@@ -181,6 +182,7 @@ function App() {
         .checkToken(jwt)
         .then((res) => {
           if (res) {
+            navigate(state.pathname);
             isLoggedIn(true);
             mainApi.setToken(jwt);
             auth.userData(jwt).then((userData) => setCurrentUser(userData));
@@ -222,6 +224,15 @@ function App() {
         );
     }
   }, [loggedIn]);
+
+  // навигация
+  useLayoutEffect(() => {
+    if (state.pathname === null || state.pathname === undefined) {
+      navigate("/");
+    } else {
+      navigate(state.pathname);
+    }
+  }, [navigate]);
 
   return (
     <>
