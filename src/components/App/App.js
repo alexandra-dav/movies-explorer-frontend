@@ -115,6 +115,7 @@ function App() {
     localStorage.removeItem("search");
     localStorage.removeItem("isShort");
     mainApi.removeToken();
+    navigate('/');
   }
   function handleClikButtunClose(evt) {
     if (
