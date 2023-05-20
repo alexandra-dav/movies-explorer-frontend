@@ -12,7 +12,7 @@ export function Header(props) {
   /* TODO стоит подумать насчет экспорта функции 
   и использовать с константой, которая создается в 
   Header и Card
-  */ 
+  */
   function useWindowSize() {
     const [size, setSize] = useState(0);
     useLayoutEffect(() => {
@@ -25,10 +25,10 @@ export function Header(props) {
     }, []);
     return size;
   }
-  
+
   return (
     <header className={`header ${props.router ? "header_color" : ""}`}>
-      <Link to="/" onClick={props.resetApiError}>
+      <Link to="/">
         <img src={logo} alt="Логотип" className="header__logo" />
       </Link>
       {props.isLogin ? (
