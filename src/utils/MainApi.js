@@ -16,7 +16,7 @@ class MainApi {
     this._headers = {
       "Content-Type": "application/json",
       Accept: "application/json",
-      Authorization: `${newToken}`,
+      Authorization: `Bearer ${newToken}`,
     };
   }
   removeToken() {

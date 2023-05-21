@@ -16,7 +16,7 @@ export function Profile({
   setOkMessage,
 }) {
   const currentUser = useContext(CurrentUserContext);
-  const [title, setTitle] = useState(`${currentUser.name}`);
+  const [title, setTitle] = useState(currentUser.name);
 
   const [isProfileForm, setIsProfileForm] = useState(true); // мы на странице просмотра профиля или редактирования?
   const name = useInput(`${currentUser.name}`, { isEmpty: true, minLenght: 2 });
