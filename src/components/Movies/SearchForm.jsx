@@ -2,15 +2,15 @@ import loupe from "../../images/icon-loupe.svg";
 import find from "../../images/find.svg";
 import filteron from "../../images/smalltumb-on.svg";
 import filteroff from "../../images/smalltumb-off.svg";
-// import { useInput } from "../../utils/validation";
 import { useEffect, useState } from "react";
 
 export function SearchForm({
   handleOnlyShortMovies,
   filterMovies,
   setFilterString,
+  myMovies
 }) {
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState('');
   const handlSubmit = (e) => {
     e.preventDefault();
     setFilterString(search);
@@ -21,11 +21,14 @@ export function SearchForm({
   useEffect(() => {
     const savedSearch = localStorage.getItem("search");
 
-    if (savedSearch) {
+    if (savedSearch && !myMovies) {
       setFilterString(savedSearch);
       setSearch(savedSearch);
+    } else {
+      setFilterString(search);
+      setSearch(search);
     }
-  }, []);
+  }, [myMovies, search, setFilterString]);
 
   return (
     <section className="movies" aria-label="Страница с сохраненными фильмами">

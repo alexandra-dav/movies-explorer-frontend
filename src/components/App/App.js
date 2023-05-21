@@ -1,5 +1,5 @@
 import React from "react";
-import { useState, useEffect, useLayoutEffect } from "react";
+import { useState, useEffect } from "react";
 import { Main } from "../Main/Main";
 import Login from "../Login";
 import Register from "../Register";

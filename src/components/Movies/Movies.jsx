@@ -3,13 +3,13 @@ import {
   useState,
   useEffect,
   useLayoutEffect,
-  useMemo,
-  useCallback,
+  useMemo
 } from "react";
 import { Header } from "../Header";
 import { SearchForm } from "./SearchForm";
 import { MoviesCardList } from "./MoviesCardList";
 import { Footer } from "../Footer";
+import Preloader from "./Preloader";
 
 export function Movies({
   onNavigationOpen,
@@ -17,7 +17,6 @@ export function Movies({
   card,
   onCardDelete,
   onCardLike,
-  myMovies,
 }) {
   const [countCard, setCountCard] = useState(0);
   const [countExtraCard, setCountExtraCard] = useState(0); // сколько карточек добавить
@@ -29,6 +28,8 @@ export function Movies({
   const [movies, setMovies] = useState([]); // массив всех фильмов
   const [filterString, setFilterString] = useState(""); // значение в инпуте поисковой строки
   const [countFiltredCard, setCountFiltredCard] = useState(0); // кол-во найденных фильмов
+
+  const [loader, setLoader] = useState(false);
 
   // получение значения размера экрана
   function useWindowSize() {
@@ -73,7 +74,9 @@ export function Movies({
   }, [filterString, isOnlyShortMovies, movies]);
 
   const moviesToRender = useMemo(() => {
+    setLoader(true);
     setCountFiltredCard(filteredMovies.length);
+    setLoader(false);
     return filteredMovies.slice(0, countCard);
   }, [filteredMovies, countCard]);
 
@@ -111,23 +114,25 @@ export function Movies({
           handleOnlyShortMovies={handleOnlyShortMovies}
           filterMovies={isOnlyShortMovies}
           setFilterString={setFilterString}
+          myMovies={false}
         />
-        {(!countFiltredCard && !filterString) ||
-        (countFiltredCard && filterString) ? (
-          <MoviesCardList
-            onCardDelete={onCardDelete}
-            onCardLike={onCardLike}
-            card={moviesToRender}
-            myMovies={myMovies}
-            filterShortMovies={isOnlyShortMovies}
-          />
-        ) : (
-          <>
-            <section className="cards" aria-label="Галлерея" id="cards">
-              <h2 className="notfound__title">Ничего не найдено</h2>
-            </section>
-          </>
-        )}
+        {(loader && <Preloader loader={loader} />) ||
+          ((!countFiltredCard && !filterString) ||
+          (countFiltredCard && filterString) ? (
+            <MoviesCardList
+              onCardDelete={onCardDelete}
+              onCardLike={onCardLike}
+              card={moviesToRender}
+              myMovies={false}
+              filterShortMovies={isOnlyShortMovies}
+            />
+          ) : (
+            <>
+              <section className="cards" aria-label="Галлерея" id="cards">
+                <h2 className="notfound__title">Ничего не найдено</h2>
+              </section>
+            </>
+          ))}
       </main>
       <button
         aria-label="more-movies"
