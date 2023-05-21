@@ -35,100 +35,98 @@ function App() {
   const [card, setCard] = useState([]);
   const [cardCurrentUser, setCardCurrentUser] = useState([]);
 
-  function handleAuthorize(data) {
-    auth
-      .authorize(data)
-      .then((res) => {
-        if (res.token) {
-          localStorage.setItem("jwt", res.token);
-          isLoggedIn(true);
-          navigate("/movies");
-          auth.userData(res.token).then((userData) => setCurrentUser(userData));
-          setErrorMessage("");
-        }
-      })
-      .catch((err) => {
-        switch (err) {
-          case "Ошибка: 400":
-            setErrorMessage(errorText.LOGINERROR400);
-            break;
-          case "Ошибка: 404":
-            setErrorMessage(errorText.LOGINERROR404);
-            break;
-          case "Ошибка: 500":
-            setErrorMessage(errorText.LOGINERROR500);
-            break;
-          case "Ошибка: 429":
-            setErrorMessage(errorText.ERROR429);
-            break;
-          default:
-            setErrorMessage(errorText.UNOTHER);
-            break;
-        }
-      });
-  }
-  function handleRegister(data) {
-    auth
-      .register(data)
-      .then((res) => {
-        if (res.statusCode !== 400) {
-          navigate("/movies", { replace: true });
-          isLoggedIn(true);
-          localStorage.setItem("jwt", res.token);
-          mainApi.setToken(res.token);
-          setCurrentUser(data);
-        }
-      })
-      .catch((err) => {
-        switch (err) {
-          case "Ошибка: 409":
-            setErrorMessage(errorText.EMAILERROR409);
-            break;
-          case "Ошибка: 500":
-            setErrorMessage(errorText.REGISTERERROR500);
-            break;
-          case "Ошибка: 429":
-            setErrorMessage(errorText.ERROR429);
-            break;
-          default:
-            setErrorMessage(errorText.UNOTHER);
-            break;
-        }
-        console.log(err);
-      });
-  }
-  function handleUpdateUser(newDataProfile) {
-    mainApi
-      .patchUserInfo(newDataProfile)
-      .then(() => {
-        navigate("/profile");
-        setCurrentUser(newDataProfile);
-        setOkMessage(massageText.CHANGEDATAPROFILE);
-      })
-      .catch((err) => {
-        switch (err) {
-          case "Ошибка: 409":
-            setErrorMessage(errorText.EMAILERROR409);
-            break;
-          case "Ошибка: 500":
-            setErrorMessage(errorText.UPDATEERROR500);
-            break;
-          case "Ошибка: 429":
-            setErrorMessage(errorText.ERROR429);
-            break;
-          default:
-            setErrorMessage(errorText.UNOTHER);
-            break;
-        }
-        console.log(err);
-      });
-  }
+  const handleAuthorize = async (data) => {
+    try {
+      const authData = await auth.authorize(data);
+      if (authData.token) {
+        localStorage.setItem("jwt", authData.token);
+        mainApi.setToken(authData.token);
+        isLoggedIn(true);
+        const userData = await auth.userData(authData.token);
+        setCurrentUser(userData);
+        setErrorMessage("");
+        // загрузка сохраненных крточек
+        const movieData = await mainApi.getUserMovies();
+        setCardCurrentUser(movieData);
+      }
+    } catch (err) {
+      switch (err) {
+        case "Ошибка: 400":
+          setErrorMessage(errorText.LOGINERROR400);
+          break;
+        case "Ошибка: 404":
+          setErrorMessage(errorText.LOGINERROR404);
+          break;
+        case "Ошибка: 500":
+          setErrorMessage(errorText.LOGINERROR500);
+          break;
+        case "Ошибка: 429":
+          setErrorMessage(errorText.ERROR429);
+          break;
+        default:
+          setErrorMessage(errorText.UNOTHER);
+          break;
+      }
+    }
+  };
+  const handleRegister = async (data) => {
+    try {
+      const authResult = await auth.register(data);
+      if (authResult.statusCode !== 400) {
+        handleAuthorize({
+          email: data.email,
+          password: data.password,
+        });
+      }
+    } catch (err) {
+      switch (err) {
+        case "Ошибка: 409":
+          setErrorMessage(errorText.EMAILERROR409);
+          break;
+        case "Ошибка: 500":
+          setErrorMessage(errorText.REGISTERERROR500);
+          break;
+        case "Ошибка: 429":
+          setErrorMessage(errorText.ERROR429);
+          break;
+        default:
+          setErrorMessage(errorText.UNOTHER);
+          break;
+      }
+      console.log(err);
+    }
+  };
+  const handleUpdateUser = async (newDataProfile) => {
+    try {
+      const updateUser = await mainApi.patchUserInfo(newDataProfile);
+      navigate("/profile");
+      setCurrentUser(updateUser);
+      setOkMessage(massageText.CHANGEDATAPROFILE);
+    } catch (err) {
+      switch (err) {
+        case "Ошибка: 409":
+          setErrorMessage(errorText.EMAILERROR409);
+          break;
+        case "Ошибка: 500":
+          setErrorMessage(errorText.UPDATEERROR500);
+          break;
+        case "Ошибка: 429":
+          setErrorMessage(errorText.ERROR429);
+          break;
+        default:
+          setErrorMessage(errorText.UNOTHER);
+          break;
+      }
+    }
+  };
+
   function handleLogOut() {
     isLoggedIn(false);
     localStorage.removeItem("jwt");
     localStorage.removeItem("search");
     localStorage.removeItem("isShort");
     mainApi.removeToken();
+    setCardCurrentUser([]);
     navigate("/");
   }
   function handleClikButtunClose(evt) {
@@ -189,67 +187,54 @@ function App() {
       handleDeleteCard(findeMovies);
     }
   }
-
   useEffect(() => {
-    if (localStorage.getItem("jwt")) {
-      const jwt = localStorage.getItem("jwt");
-      console.log(jwt);
-      auth
-        .checkToken(jwt)
-        .then((res) => {
-          if (res) {
+    const checkMe = async () => {
+      try {
+        if (localStorage.getItem("jwt")) {
+          const jwt = localStorage.getItem("jwt");
+          const data = await auth.checkToken(jwt);
+          if (data) {
             isLoggedIn(true);
             mainApi.setToken(jwt);
-            auth.userData(jwt).then((userData) => {
-              setCurrentUser(userData);
-              console.log(userData, "currentUser: ", currentUser);
-            });
-            navigate(state.pathname);
+            setCurrentUser(data);
+            if (state.pathname === "/signin" || state.pathname === "/signup") {
+              navigate("/movies");
+            } else {
+              navigate(state.pathname);
+            }
           }
-        })
-        .catch((err) => {
-          setApiErrorMessage(errorText.UNOTHER);
-          console.log(err, apiErrorMessage);
-        });
-    } else {
-      handleLogOut();
-    }
+        } else {
+          handleLogOut();
+        }
+      } catch (err) {
+        setApiErrorMessage(errorText.UNOTHER);
+        console.log(err, apiErrorMessage);
+      }
+    };
+    checkMe();
   }, [loggedIn]);
-
-  // загрузка крточек с beatfilm-movies
-  useEffect(() => {
+   // загрузка крточек с beatfilm-movies
+   useEffect(() => {
     if (loggedIn) {
       moviesApi
         .getInitialCards()
         .then((cardData) => {
           setCard(cardData);
         })
-        .catch((err) => {
-          setApiErrorMessage(errorText.UNOTHER);
-          console.log(err, apiErrorMessage);
-        });
-      if (localStorage.getItem("jwt")) {
-        mainApi
-          .getUserMovies()
-          .then((movieData) => {
-            setCardCurrentUser(movieData);
-          })
-          .catch((err) => {
-            setApiErrorMessage(errorText.UNOTHER);
-            console.log(err, apiErrorMessage);
-          });
-      }
+        .catch((err) =>
+          console.log("Ошибка: ", err, " код ошибки: ", err.status)
+        );
     }
   }, [loggedIn]);
-
   // навигация
-  useLayoutEffect(() => {
+/*   TODO: скорее всего не нужно, повторяет функционал из предыдущего useEffect
+useLayoutEffect(() => {
     if (state.pathname === null || state.pathname === undefined) {
       navigate("/");
     } else {
       navigate(state.pathname);
     }
-  }, [navigate]);
+  }, [navigate]); */
 
   return (
     <>
