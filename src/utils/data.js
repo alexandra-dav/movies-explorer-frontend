@@ -17,5 +17,5 @@ export const massageText = {
   SEARCHFORMVALIDATIONMESSAGE: 'Введите что-нибудь'
 }
 
-export const BASE_URL = "http://localhost:3000";
-//export const BASE_URL = "https://api.your.movies.nomoredomains.work";
+//export const BASE_URL = "http://localhost:3000";
+export const BASE_URL = "https://api.your.movies.nomoredomains.work";
