@@ -18,7 +18,7 @@ export function Movies({
   const [countExtraCard, setCountExtraCard] = useState(0); // сколько карточек добавить
   const width = useWindowSize(); // ширина экрана
   const [countWillAdd, setCountWillAdd] = useState(0);
-  const [isOnlyShortMovies, setOnlyShortMovies] = useState(true);
+  const [isOnlyShortMovies, setOnlyShortMovies] = useState(false);
 
   // для фильтра сохраняем массив карточек
   const [movies, setMovies] = useState([]); // массив всех фильмов

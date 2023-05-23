@@ -13,7 +13,8 @@ export const errorText = {
   UNOTHER: 'На сервере произошла ошибка.'
 }
 export const massageText = {
-  CHANGEDATAPROFILE: 'Вы успешно изменили данные профиля.'
+  CHANGEDATAPROFILE: 'Вы успешно изменили данные профиля.',
+  SEARCHFORMVALIDATIONMESSAGE: 'Введите что-нибудь'
 }
 
 export const BASE_URL = "http://localhost:3000";
