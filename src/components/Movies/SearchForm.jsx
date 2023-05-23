@@ -28,7 +28,7 @@ export function SearchForm({
       setFilterString(search);
       setSearch(search);
     }
-  }, [myMovies, search, setFilterString]);
+  }, []);
 
   return (
     <section className="movies" aria-label="Страница с сохраненными фильмами">
