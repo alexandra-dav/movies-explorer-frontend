@@ -15,7 +15,7 @@ export function SearchForm({
   const [showError, setShowError] = useState(false);
   const handlSubmit = (e) => {
     e.preventDefault();
-    if(search){setFilterString(search);}    
+    setFilterString(search);
   };
   const checkError = (data) => {
     if (data === '') {
