@@ -34,6 +34,8 @@ function App() {
 
   const [card, setCard] = useState([]);
   const [cardCurrentUser, setCardCurrentUser] = useState([]);
+  const [loaderMovies, setLoaderMovies] = useState(false);
+  const [loaderSavedMovies, setLoaderSavedMovies] = useState(false);
 
   const handleAuthorize = async (data) => {
     try {
@@ -45,9 +47,6 @@ function App() {
         const userData = await auth.userData(authData.token);
         setCurrentUser(userData);
         setErrorMessage("");
-        // загрузка сохраненных крточек
-        const movieData = await mainApi.getUserMovies();
-        setCardCurrentUser(movieData);
       }
     } catch (err) {
       switch (err) {
@@ -100,7 +99,7 @@ function App() {
     try {
       const updateUser = await mainApi.patchUserInfo(newDataProfile);
       navigate("/profile");
-      setCurrentUser(updateUser);
+      setCurrentUser(updateUser); // внесли в контекст
       setOkMessage(massageText.CHANGEDATAPROFILE);
     } catch (err) {
       switch (err) {
@@ -119,7 +118,6 @@ function App() {
       }
     }
   };
-
   function handleLogOut() {
     isLoggedIn(false);
     localStorage.removeItem("jwt");
@@ -213,21 +211,39 @@ function App() {
     };
     checkMe();
   }, [loggedIn]);
-   // загрузка крточек с beatfilm-movies
-   useEffect(() => {
+  // загрузка крточек
+  useEffect(() => {
+    // загрузка крточек с beatfilm-movies
     if (loggedIn) {
-      moviesApi
-        .getInitialCards()
-        .then((cardData) => {
-          setCard(cardData);
-        })
-        .catch((err) =>
-          console.log("Ошибка: ", err, " код ошибки: ", err.status)
-        );
+      setLoaderMovies(true);
+      setLoaderSavedMovies(true);
+      const userMoviesApi = async () => {
+        try {
+          navigate("/movies");
+          const moviesApiData = await moviesApi.getInitialCards();
+          setCard(moviesApiData);
+          setLoaderMovies(false);
+        } catch (err) {
+          setLoaderMovies(false);
+          console.log("Ошибка: ", err, " код ошибки: ", err.status);
+        }
+      };
+      const userMoviesMainApi = async () => {
+        try {
+          const movieData = await mainApi.getUserMovies();
+          setCardCurrentUser(movieData);
+          setLoaderSavedMovies(false);
+        } catch (err) {
+          setLoaderSavedMovies(false);
+          console.log("Ошибка: ", err, " код ошибки: ", err.status);
+        }
+      };
+      userMoviesApi(); // загрузка крточек с beatfilm-movies
+      userMoviesMainApi(); // загрузка крточек пользователя
     }
   }, [loggedIn]);
   // навигация
-/*   TODO: скорее всего не нужно, повторяет функционал из предыдущего useEffect
+  /*   TODO: скорее всего не нужно, повторяет функционал из предыдущего useEffect
 useLayoutEffect(() => {
     if (state.pathname === null || state.pathname === undefined) {
       navigate("/");
@@ -272,6 +288,7 @@ useLayoutEffect(() => {
                     onCardDelete={handleDeleteCard}
                     onCardLike={handleCardLike}
                     myMovies={false}
+                    loaderMovies={loaderMovies}
                   />
                 </ProtectedRoute>
               }
@@ -286,6 +303,7 @@ useLayoutEffect(() => {
                     card={cardCurrentUser}
                     onCardDelete={handleDeleteCard}
                     onCardLike={handleCardLike}
+                    loaderSavedMovies={loaderSavedMovies}
                   />
                 </ProtectedRoute>
               }

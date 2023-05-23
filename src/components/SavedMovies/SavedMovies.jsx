@@ -11,6 +11,7 @@ export function SavedMovies({
   card,
   onCardDelete,
   onCardLike,
+  loaderSavedMovies
 }) {
   const [countCard, setCountCard] = useState(0);
   const [countExtraCard, setCountExtraCard] = useState(0); // сколько карточек добавить
@@ -23,7 +24,6 @@ export function SavedMovies({
   const [filterStringInput, setFilterStringInput] = useState(""); // значение в инпуте поисковой строки
   const [countFiltredCard, setCountFiltredCard] = useState(0); // кол-во найденных фильмов
 
-  const [loader, setLoader] = useState(false);
   // получение значения размера экрана
   function useWindowSize() {
     const [size, setSize] = useState(0);
@@ -60,14 +60,11 @@ export function SavedMovies({
   }, [filterStringInput, isOnlyShortMovies, movies]);
 
   const moviesToRender = useMemo(() => {
-    setLoader(true);
     if (filterStringInput || isOnlyShortMovies) {
       setCountFiltredCard(filteredMovies.length);
-      setLoader(false);
       return filteredMovies.slice(0, countCard);
     } else {
       setCountFiltredCard(card.length);
-      setLoader(false);
       return card.slice(0, countCard);
     }
   }, [filterStringInput, isOnlyShortMovies, filteredMovies, countCard, card]);
@@ -102,7 +99,7 @@ export function SavedMovies({
           setFilterString={setFilterStringInput}
           myMovies={true}
         />
-        {(loader && <Preloader loader={loader} />) ||
+        {(loaderSavedMovies && <Preloader loader={!loaderSavedMovies} />) ||
           (countFiltredCard === 0 && filterStringInput ? (
             <>
               <section className="cards" aria-label="Галлерея" id="cards">
@@ -110,23 +107,27 @@ export function SavedMovies({
               </section>
             </>
           ) : (
-            <MoviesCardList
-              onCardDelete={onCardDelete}
-              onCardLike={onCardLike}
-              card={moviesToRender}
-              myMovies={true}
-              filterShortMovies={isOnlyShortMovies}
-            />
+            <>
+              <MoviesCardList
+                onCardDelete={onCardDelete}
+                onCardLike={onCardLike}
+                card={moviesToRender}
+                myMovies={true}
+                filterShortMovies={isOnlyShortMovies}
+              />
+              <button
+                aria-label="more-movies"
+                className="landing__button landing__button_movies"
+                style={{
+                  display: countCard >= countFiltredCard ? "none" : "block",
+                }}
+                onClick={handleExtraCard}
+              >
+                Ещё
+              </button>
+            </>
           ))}
       </main>
-      <button
-        aria-label="more-movies"
-        className="landing__button landing__button_movies"
-        style={{ display: countCard >= countFiltredCard ? "none" : "block" }}
-        onClick={handleExtraCard}
-      >
-        Ещё
-      </button>
       <Footer />
     </>
   );

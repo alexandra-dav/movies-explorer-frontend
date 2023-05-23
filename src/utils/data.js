@@ -16,5 +16,5 @@ export const massageText = {
   CHANGEDATAPROFILE: 'Вы успешно изменили данные профиля.'
 }
 
-//export const BASE_URL = "http://localhost:3000";
-export const BASE_URL = "https://api.your.movies.nomoredomains.work";
+export const BASE_URL = "http://localhost:3000";
+//export const BASE_URL = "https://api.your.movies.nomoredomains.work";

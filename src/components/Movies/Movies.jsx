@@ -1,10 +1,5 @@
 // компонент страницы с поиском по фильмам.
-import {
-  useState,
-  useEffect,
-  useLayoutEffect,
-  useMemo
-} from "react";
+import { useState, useEffect, useLayoutEffect, useMemo } from "react";
 import { Header } from "../Header";
 import { SearchForm } from "./SearchForm";
 import { MoviesCardList } from "./MoviesCardList";
@@ -17,19 +12,43 @@ export function Movies({
   card,
   onCardDelete,
   onCardLike,
+  loaderMovies,
 }) {
   const [countCard, setCountCard] = useState(0);
   const [countExtraCard, setCountExtraCard] = useState(0); // сколько карточек добавить
   const width = useWindowSize(); // ширина экрана
   const [countWillAdd, setCountWillAdd] = useState(0);
-  const [isOnlyShortMovies, setOnlyShortMovies] = useState(false);
+  const [isOnlyShortMovies, setOnlyShortMovies] = useState(true);
 
   // для фильтра сохраняем массив карточек
   const [movies, setMovies] = useState([]); // массив всех фильмов
   const [filterString, setFilterString] = useState(""); // значение в инпуте поисковой строки
   const [countFiltredCard, setCountFiltredCard] = useState(0); // кол-во найденных фильмов
 
-  const [loader, setLoader] = useState(false);
+  const filteredMovies = useMemo(() => {
+    if (!filterString) {
+      return [];
+    }
+    const filtered = movies.filter((movie) => {
+      const nameRu = movie.nameRU.toLowerCase();
+      const nameEn = movie.nameEN.toLowerCase();
+      const str = filterString.toLowerCase();
+      if (isOnlyShortMovies && movie.duration > 40) {
+        return false;
+      }
+      return nameRu.includes(str) || nameEn.includes(str);
+    });
+
+    localStorage.setItem("search", filterString);
+    localStorage.setItem("isShort", String(isOnlyShortMovies));
+
+    return filtered;
+  }, [filterString, isOnlyShortMovies, movies]);
+
+  const moviesToRender = useMemo(() => {
+    setCountFiltredCard(filteredMovies.length);
+    return filteredMovies.slice(0, countCard);
+  }, [filteredMovies, countCard]);
 
   // получение значения размера экрана
   function useWindowSize() {
@@ -51,35 +70,6 @@ export function Movies({
   function handleExtraCard() {
     setCountExtraCard(countExtraCard + countWillAdd);
   }
-  const filteredMovies = useMemo(() => {
-    if (!filterString) {
-      return [];
-    }
-
-    const filtered = movies.filter((movie) => {
-      const nameRu = movie.nameRU.toLowerCase();
-      const nameEn = movie.nameEN.toLowerCase();
-      const str = filterString.toLowerCase();
-      if (isOnlyShortMovies && movie.duration > 40) {
-        return false;
-      }
-
-      return nameRu.includes(str) || nameEn.includes(str);
-    });
-
-    localStorage.setItem("search", filterString);
-    localStorage.setItem("isShort", String(isOnlyShortMovies));
-
-    return filtered;
-  }, [filterString, isOnlyShortMovies, movies]);
-
-  const moviesToRender = useMemo(() => {
-    setLoader(true);
-    setCountFiltredCard(filteredMovies.length);
-    setLoader(false);
-    return filteredMovies.slice(0, countCard);
-  }, [filteredMovies, countCard]);
-
   useEffect(() => {
     const savedIsShort = localStorage.getItem("isShort");
     setMovies(card);
@@ -101,7 +91,6 @@ export function Movies({
       setCountWillAdd(2);
     }
   }, [card, countCard, countExtraCard, countWillAdd, setCountCard, width]);
-
   return (
     <>
       <Header
@@ -116,7 +105,8 @@ export function Movies({
           setFilterString={setFilterString}
           myMovies={false}
         />
-        {(loader && <Preloader loader={loader} />) ||
+
+        {(loaderMovies && <Preloader loader={!loaderMovies} />) ||
           ((!countFiltredCard && !filterString) ||
           (countFiltredCard && filterString) ? (
             <MoviesCardList
@@ -133,15 +123,16 @@ export function Movies({
               </section>
             </>
           ))}
+        <button
+          aria-label="more-movies"
+          className="landing__button landing__button_movies"
+          style={{ display: countCard >= countFiltredCard ? "none" : "block" }}
+          onClick={handleExtraCard}
+        >
+          Ещё
+        </button>
       </main>
-      <button
-        aria-label="more-movies"
-        className="landing__button landing__button_movies"
-        style={{ display: countCard >= countFiltredCard ? "none" : "block" }}
-        onClick={handleExtraCard}
-      >
-        Ещё
-      </button>
+
       <Footer />
     </>
   );
