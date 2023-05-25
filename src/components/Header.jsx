@@ -1,12 +1,18 @@
 // компонент, который отрисовывает шапку сайта на страницу.
 import logo from "../images/logo.svg";
 import burger from "../images/icon-main.svg";
+import { useState, useLayoutEffect } from "react";
 import { Link, NavLink } from "react-router-dom";
 import profile from "../images/icon-acc.svg";
-import { useState, useLayoutEffect } from "react";
 
 export function Header(props) {
-  const width = useWindowSize();
+  const width = useWindowSize(); // ширина экрана
+
+  // получение значения размера экрана
+  /* TODO стоит подумать насчет экспорта функции 
+  и использовать с константой, которая создается в 
+  Header и Card
+  */
   function useWindowSize() {
     const [size, setSize] = useState(0);
     useLayoutEffect(() => {
@@ -19,6 +25,7 @@ export function Header(props) {
     }, []);
     return size;
   }
+
   return (
     <header className={`header ${props.router ? "header_color" : ""}`}>
       <Link to="/">

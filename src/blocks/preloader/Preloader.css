@@ -41,7 +41,6 @@
 
 .preloader {
     display: flex;
-    align-items: center;
     justify-content: center;
     width: 100%;
     height: 100%;
@@ -85,4 +84,8 @@
     z-index: 10;
     background: #FF6838;
     animation: preloader-inside-red 1s ease-in-out infinite;
+}
+
+.preloader__hidden {
+    display: none
 }

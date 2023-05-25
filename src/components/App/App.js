@@ -1,48 +1,131 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Main } from "../Main/Main";
 import Login from "../Login";
 import Register from "../Register";
-import { Route, Routes, useNavigate } from "react-router-dom";
-/* TO DO: для защиты авторизацией
-import ProtectedRoute from '../ProtectedRoute/ProtectedRoute'; */
+import { Route, Routes, useNavigate, useLocation } from "react-router-dom";
+import ProtectedRoute from "../ProtectedRoute/ProtectedRoute";
 import { Navigation } from "../Navigation";
 import { NavTab } from "../Main/NavTab";
 import { Notfoundpage } from "../Notfoundpage";
 import { SavedMovies } from "../SavedMovies/SavedMovies";
 import { Movies } from "../Movies/Movies";
 import { Profile } from "../Profile";
+import { auth } from "../../utils/auth";
+import { mainApi } from "../../utils/MainApi";
+import { moviesApi } from "../../utils/MoviesApi";
 import {
   CurrentUserContext,
-  userContext,
+  CurrentUsersMoviesContext,
 } from "../../utils/CurrentUserContext";
-import { initialCards } from "../../utils/data";
+import { errorText, massageText } from "../../utils/data";
 
 function App() {
-  const [currentUser, setCurrentUser] = useState(userContext);
+  const [currentUser, setCurrentUser] = useState({});
   const navigate = useNavigate();
+  const state = useLocation();
+  const [errorMessage, setErrorMessage] = useState("");
+  const [apiErrorMessage, setApiErrorMessage] = useState("");
+  const [okMessage, setOkMessage] = useState("");
 
   const [loggedIn, isLoggedIn] = useState(false);
   const [isNavigationOpen, setNavigationOpen] = useState(false);
   const [isNavTabOpen, setNavTabOpen] = useState(false);
 
-  const [card, setCard] = useState(initialCards);
+  const [card, setCard] = useState([]);
+  const [cardCurrentUser, setCardCurrentUser] = useState([]);
+  const [loaderMovies, setLoaderMovies] = useState(false);
+  const [loaderSavedMovies, setLoaderSavedMovies] = useState(false);
 
-  function handleAuthorize(data) {
-    setCurrentUser(data);
-    isLoggedIn(true);
-    navigate("/");
-  }
-  function handleRegister() {
-    navigate("/signin");
-  }
-  function handleUpdateUser(newDataProfile) {
-    console.log(newDataProfile);
-    setCurrentUser(newDataProfile);
-  }
+  const handleAuthorize = async (data) => {
+    try {
+      const authData = await auth.authorize(data);
+      if (authData.token) {
+        localStorage.setItem("jwt", authData.token);
+        mainApi.setToken(authData.token);
+        isLoggedIn(true);
+        const userData = await auth.userData(authData.token);
+        setCurrentUser(userData);
+        setErrorMessage("");
+      }
+    } catch (err) {
+      switch (err) {
+        case "Ошибка: 400":
+          setErrorMessage(errorText.LOGINERROR400);
+          break;
+        case "Ошибка: 404":
+          setErrorMessage(errorText.LOGINERROR404);
+          break;
+        case "Ошибка: 500":
+          setErrorMessage(errorText.LOGINERROR500);
+          break;
+        case "Ошибка: 429":
+          setErrorMessage(errorText.ERROR429);
+          break;
+        default:
+          setErrorMessage(errorText.UNOTHER);
+          break;
+      }
+    }
+  };
+  const handleRegister = async (data) => {
+    try {
+      const authResult = await auth.register(data);
+      if (authResult.statusCode !== 400) {
+        handleAuthorize({
+          email: data.email,
+          password: data.password,
+        });
+      }
+    } catch (err) {
+      switch (err) {
+        case "Ошибка: 409":
+          setErrorMessage(errorText.EMAILERROR409);
+          break;
+        case "Ошибка: 500":
+          setErrorMessage(errorText.REGISTERERROR500);
+          break;
+        case "Ошибка: 429":
+          setErrorMessage(errorText.ERROR429);
+          break;
+        default:
+          setErrorMessage(errorText.UNOTHER);
+          break;
+      }
+      console.log(err);
+    }
+  };
+  const handleUpdateUser = async (newDataProfile) => {
+    try {
+      const updateUser = await mainApi.patchUserInfo(newDataProfile);
+      navigate("/profile");
+      setCurrentUser(updateUser); // внесли в контекст
+      setOkMessage(massageText.CHANGEDATAPROFILE);
+    } catch (err) {
+      switch (err) {
+        case "Ошибка: 409":
+          setErrorMessage(errorText.EMAILERROR409);
+          break;
+        case "Ошибка: 500":
+          setErrorMessage(errorText.UPDATEERROR500);
+          break;
+        case "Ошибка: 429":
+          setErrorMessage(errorText.ERROR429);
+          break;
+        default:
+          setErrorMessage(errorText.UNOTHER);
+          break;
+      }
+    }
+  };
   function handleLogOut() {
     isLoggedIn(false);
-    /* localStorage.removeItem("jwt"); */
+    localStorage.removeItem("jwt");
+    localStorage.removeItem("search");
+    localStorage.removeItem("isShort");
+    mainApi.removeToken();
+    setCardCurrentUser([]);
+    navigate("/");
   }
   function handleClikButtunClose(evt) {
     if (
@@ -61,69 +144,206 @@ function App() {
     setNavTabOpen(!isNavTabOpen);
   }
   function handleDeleteCard(card) {
-    setCard((state) => state.filter((c) => c.id !== card.id));
+    mainApi
+      .deleteCard(card._id)
+      .then(() => {
+        setCardCurrentUser((state) => state.filter((c) => c._id !== card._id));
+      })
+      .catch((err) => {
+        setApiErrorMessage(errorText.UNOTHER);
+        console.log(err, apiErrorMessage);
+      });
   }
+  function handleCardLike(card) {
+    const findeMovies = cardCurrentUser.find((e) => e.movieId === card.id);
+    // Отправляем запрос в API и получаем обновлённые данные карточки
+    if (!Boolean(findeMovies)) {
+      mainApi
+        .likeMovie({
+          country: card.country,
+          director: card.director,
+          duration: card.duration,
+          year: card.year,
+          description: card.description,
+          image: `https://api.nomoreparties.co${card.image.url}`,
+          trailerLink: card.trailerLink,
+          thumbnail: `https://api.nomoreparties.co${card.image.formats.thumbnail.url}`,
+          movieId: card.id,
+          nameRU: card.nameRU,
+          nameEN: card.nameEN,
+        })
+        .then((newMovie) => {
+          const moviesArray = cardCurrentUser;
+          moviesArray.push(newMovie);
+          setCardCurrentUser(moviesArray);
+        })
+        .catch((err) => {
+          setApiErrorMessage(errorText.UNOTHER);
+          console.log(err, apiErrorMessage);
+        });
+    } else {
+      handleDeleteCard(findeMovies);
+    }
+  }
+  useEffect(() => {
+    const checkMe = async () => {
+      try {
+        if (localStorage.getItem("jwt")) {
+          const jwt = localStorage.getItem("jwt");
+          const data = await auth.checkToken(jwt);
+          if (data) {
+            isLoggedIn(true);
+            mainApi.setToken(jwt);
+            setCurrentUser(data);
+            if (state.pathname === "/signin" || state.pathname === "/signup") {
+              navigate("/movies");
+            } else {
+              navigate(state.pathname);
+            }
+          }
+        } else {
+          handleLogOut();
+        }
+      } catch (err) {
+        setApiErrorMessage(errorText.UNOTHER);
+        console.log(err, apiErrorMessage);
+      }
+    };
+    checkMe();
+  }, [loggedIn]);
+  // загрузка крточек
+  useEffect(() => {
+    // загрузка крточек с beatfilm-movies
+    if (loggedIn) {
+      setLoaderMovies(true);
+      setLoaderSavedMovies(true);
+      const userMoviesApi = async () => {
+        try {
+          navigate("/movies");
+          const moviesApiData = await moviesApi.getInitialCards();
+          setCard(moviesApiData);
+          setLoaderMovies(false);
+        } catch (err) {
+          setLoaderMovies(false);
+          console.log("Ошибка: ", err, " код ошибки: ", err.status);
+        }
+      };
+      const userMoviesMainApi = async () => {
+        try {
+          const movieData = await mainApi.getUserMovies();
+          setCardCurrentUser(movieData);
+          setLoaderSavedMovies(false);
+        } catch (err) {
+          setLoaderSavedMovies(false);
+          console.log("Ошибка: ", err, " код ошибки: ", err.status);
+        }
+      };
+      userMoviesApi(); // загрузка крточек с beatfilm-movies
+      userMoviesMainApi(); // загрузка крточек пользователя
+    }
+  }, [loggedIn]);
+  // навигация
+  /*   TODO: скорее всего не нужно, повторяет функционал из предыдущего useEffect
+useLayoutEffect(() => {
+    if (state.pathname === null || state.pathname === undefined) {
+      navigate("/");
+    } else {
+      navigate(state.pathname);
+    }
+  }, [navigate]); */
+
   return (
     <>
       <CurrentUserContext.Provider value={currentUser}>
-        <Routes>
-          <Route
-            path="/signin"
-            element={<Login onAuthorize={handleAuthorize} />}
-          />
-          <Route
-            path="/signup"
-            element={<Register onRegister={handleRegister} />}
-          />
-          <Route
-            path="/"
-            element={
-              <Main
-                onNavigationOpen={handleNavigationClick}
-                onNavTabOpen={handleNavTabClick}
-                isLogin={loggedIn}
-                /* windowWidth={windowWidth} */
-              />
-            }
-          />
-          <Route
-            path="/saved-movies"
-            element={
-              <SavedMovies
-                onNavigationOpen={handleNavigationClick}
-                isLogin={loggedIn}
-                card={card}
-                onCardDelete={handleDeleteCard}
-              />
-            }
-          />
-          <Route
-            path="/movies"
-            element={
-              <Movies
-                onNavigationOpen={handleNavigationClick}
-                isLogin={loggedIn}
-                card={card}
-                onCardDelete={handleDeleteCard}
-              />
-            }
-          />
-          <Route
-            path="/profile"
-            element={
-              <Profile
-                isLogin={loggedIn}
-                onNavigationOpen={handleNavigationClick}
-                onLogout={handleLogOut}
-                onUpdateUser={handleUpdateUser}
-              />
-            }
-          />
-          <Route path="*" element={<Notfoundpage />} />
-        </Routes>
+        <CurrentUsersMoviesContext.Provider value={cardCurrentUser}>
+          <Routes>
+            <Route
+              path="/signin"
+              element={
+                <Login
+                  onAuthorize={handleAuthorize}
+                  errorMessage={errorMessage}
+                  setErrorMessage={setErrorMessage}
+                />
+              }
+            />
+            <Route
+              path="/signup"
+              element={
+                <Register
+                  onRegister={handleRegister}
+                  errorMessage={errorMessage}
+                  setErrorMessage={setErrorMessage}
+                />
+              }
+            />
+            <Route
+              path="/movies"
+              element={
+                <ProtectedRoute loggedIn={loggedIn}>
+                  <Movies
+                    onNavigationOpen={handleNavigationClick}
+                    isLogin={loggedIn}
+                    card={card}
+                    onCardDelete={handleDeleteCard}
+                    onCardLike={handleCardLike}
+                    myMovies={false}
+                    loaderMovies={loaderMovies}
+                  />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/saved-movies"
+              element={
+                <ProtectedRoute loggedIn={loggedIn}>
+                  <SavedMovies
+                    onNavigationOpen={handleNavigationClick}
+                    isLogin={loggedIn}
+                    card={cardCurrentUser}
+                    onCardDelete={handleDeleteCard}
+                    onCardLike={handleCardLike}
+                    loaderSavedMovies={loaderSavedMovies}
+                  />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/profile"
+              element={
+                <ProtectedRoute loggedIn={loggedIn}>
+                  <Profile
+                    isLogin={loggedIn}
+                    onNavigationOpen={handleNavigationClick}
+                    onLogout={handleLogOut}
+                    onUpdateUser={handleUpdateUser}
+                    errorMessage={errorMessage}
+                    setErrorMessage={setErrorMessage}
+                    okMessage={okMessage}
+                    setOkMessage={setOkMessage}
+                  />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/"
+              element={
+                <Main
+                  onNavigationOpen={handleNavigationClick}
+                  onNavTabOpen={handleNavTabClick}
+                  isLogin={loggedIn}
+                />
+              }
+            />
+            <Route path="*" element={<Notfoundpage />} />
+          </Routes>
 
-        <Navigation isOpen={isNavigationOpen} onClose={handleClikButtunClose} />
-        <NavTab isOpen={isNavTabOpen} onClose={handleClikButtunClose} />
+          <Navigation
+            isOpen={isNavigationOpen}
+            onClose={handleClikButtunClose}
+          />
+          <NavTab isOpen={isNavTabOpen} onClose={handleClikButtunClose} />
+        </CurrentUsersMoviesContext.Provider>
       </CurrentUserContext.Provider>
     </>
   );

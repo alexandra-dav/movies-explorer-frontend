@@ -1,0 +1,11 @@
+.validation__disabled {
+  color: gray;
+}
+.validation__disabled_button {
+  background: rgba(248, 248, 248, 1);
+}
+.validation__disabled:hover {
+  cursor: default;
+  transform: none;
+  opacity: 1;
+}

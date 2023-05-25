@@ -1,0 +1,12 @@
+.validation__buttonError {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 12px;
+  margin: 0;
+  padding: 0;
+  position: absolute;
+  top: calc(100% - 108px);
+  text-align: center;
+  left: 0;
+  right: 0;
+}

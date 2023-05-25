@@ -1,0 +1,16 @@
+.validation__form {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 14px;
+  margin: 10px 0 0 50px;
+  padding: 0;
+  position: absolute;
+  top: calc(100%);
+  left: 0;
+}
+@media screen and (max-width: 769px) {
+  .validation__form {
+    top: calc(40%);
+    margin: 10px 0 0;
+  }
+}

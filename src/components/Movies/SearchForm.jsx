@@ -1,24 +1,56 @@
-/* форма поиска, куда пользователь будет вводить запрос.
-Обратите внимание на фильтр с чекбоксом «Только короткометражки».
-Для него можно воспользоваться отдельным управляемым компонентом FilterCheckbox. */
 import loupe from "../../images/icon-loupe.svg";
 import find from "../../images/find.svg";
 import filteron from "../../images/smalltumb-on.svg";
 import filteroff from "../../images/smalltumb-off.svg";
-import { useState } from "react";
+import { massageText } from "../../utils/data";
+import { useEffect, useState } from "react";
 
-export function SearchForm() {
-  const [filterMovies, setFilterMovies] = useState(false);
-  function handleFilter() {
-    setFilterMovies(!filterMovies);
-  }
+export function SearchForm({
+  handleOnlyShortMovies,
+  filterMovies,
+  setFilterString,
+  myMovies,
+}) {
+  const [search, setSearch] = useState("");
+  const [showError, setShowError] = useState(false);
+  const handlSubmit = (e) => {
+    e.preventDefault();
+    setFilterString(search);
+  };
+  const checkError = (data) => {
+    if (data === '') {
+      setShowError(true);
+    } else {
+      setShowError(false);
+    }
+  };
+  const hanleChangeSearch = (e) => {
+    checkError(e.target.value);
+    setSearch(e.target.value);    
+  };
+  useEffect(() => {
+    const savedSearch = localStorage.getItem("search");
+
+    if (savedSearch && !myMovies) {
+      setFilterString(savedSearch);
+      setSearch(savedSearch);
+    } else {
+      setFilterString(search);
+      setSearch(search);
+    }
+  }, []);
+
   return (
     <section className="movies" aria-label="Страница с сохраненными фильмами">
-      <form
-        className="movies__form"
-        /* onSubmit={handlSubmit} */
-      >
-        <div className="movies__main">
+      <div className="movies__form">
+        <form className="movies__main" onSubmit={handlSubmit}>
+        <span
+            className={`${
+              showError && "validation__form validation__text_color"
+            }`}
+          >
+            {showError ? massageText.SEARCHFORMVALIDATIONMESSAGE : ""}
+          </span>
           <img
             src={loupe}
             alt="Лупа"
@@ -30,26 +62,29 @@ export function SearchForm() {
             id="movies"
             name="movies"
             placeholder="Фильм"
+            value={search}
+            onChange={hanleChangeSearch}
             required
           />
-          <button className="movies__find">
+          
+          <button aria-label="submit" className="movies__find" type="submit">
             <img
               src={find}
               alt="Поиск"
               className="movies__logo movies__logo_find"
             />
           </button>
-        </div>
+        </form>
         <div className="movies__filter">
           <img
             src={`${filterMovies ? filteron : filteroff}`}
-            onClick={handleFilter}
+            onClick={handleOnlyShortMovies}
             className="movies__logo movies__logo_filter"
             alt="Фильтр"
           />
           <p className="movies__tittle-filter">Короткометражки</p>
         </div>
-      </form>
+      </div>
     </section>
   );
 }

@@ -2,43 +2,68 @@
 import { Header } from "./Header";
 import { Link } from "react-router-dom";
 import { useState, useContext, useEffect } from "react";
+import { useInput } from "../utils/validation";
 import { CurrentUserContext } from "../utils/CurrentUserContext";
 
-export function Profile({ isLogin, onNavigationOpen, onLogout, onUpdateUser }) {
+export function Profile({
+  isLogin,
+  onNavigationOpen,
+  onLogout,
+  onUpdateUser,
+  errorMessage,
+  setErrorMessage,
+  okMessage,
+  setOkMessage,
+}) {
   const currentUser = useContext(CurrentUserContext);
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [title, setTitle] = useState("");
-  const [canEdit, setCanEdit] = useState(false);
-  function handleEdit() {
-    setCanEdit(!canEdit);
-  }
-  function handleChangeName(e) {
-    setName(e.target.value);
-  }
-  function handleChangeEmail(e) {
-    setEmail(e.target.value);
-  }
+  const [title, setTitle] = useState(currentUser.name);
 
+  const [isProfileForm, setIsProfileForm] = useState(true); // мы на странице просмотра профиля или редактирования?
+  const name = useInput(`${currentUser.name}`, { isEmpty: true, minLenght: 2 });
+  const email = useInput(`${currentUser.email}`, {
+    isEmpty: true,
+    minLenght: 4,
+    isEmail: true,
+  });
+  const resetAllMessage = () => {
+    setOkMessage("");
+    setErrorMessage("");
+  };
+  function checkData() {
+    if (
+      (currentUser.name === name.value && currentUser.email === email.value) ||
+      (!!(!name.inputValid || !email.inputValid || errorMessage))      
+    ) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+  function handleEdit() {
+    setIsProfileForm(!isProfileForm);
+  }
   function handleSubmit(e) {
     // Запрещаем браузеру переходить по адресу формы
     e.preventDefault();
-
     handleEdit();
-    if (canEdit) {
-      setTitle(name);
+    if (!isProfileForm) {
+      setTitle(name.value);
       // Передаём значения управляемых компонентов во внешний обработчик
       onUpdateUser({
-        name,
-        email,
+        name: name.value,
+        email: email.value,
       });
     }
   }
   useEffect(() => {
-    setName(currentUser.name || "Иван");
-    setTitle(currentUser.name || "Иван");
-    setEmail(currentUser.email);
-  }, [currentUser]);
+    if (errorMessage) {
+      setIsProfileForm(false);
+    }
+  }, [errorMessage]);
+  useEffect(() => {
+    document.addEventListener("mousedown", resetAllMessage);
+    return () => document.removeEventListener("mousedown", resetAllMessage);
+  });
 
   return (
     <>
@@ -63,16 +88,19 @@ export function Profile({ isLogin, onNavigationOpen, onLogout, onUpdateUser }) {
                 type="text"
                 id="profileName"
                 name="name"
-                className="profile__input profile__input_form_name"
+                className={`${
+                  name.isDirty &&
+                  (name.isEmpty || name.minLenghtError) &&
+                  "validation__text_color"
+                } profile__input profile__input_form_name`}
                 minLength="2"
                 maxLength="40"
                 required
-                readOnly={!canEdit}
-                value={name}
-                onChange={handleChangeName}
-                placeholder="имя"
+                readOnly={isProfileForm}
+                value={name.value}
+                onChange={name.onChange}
+                onBlur={name.onBlur}
               />
-              <span className="profileEmail-error"></span>
             </fieldset>
             <fieldset className="profile__fieldset">
               <label htmlFor="email" className="profile__label">
@@ -82,26 +110,40 @@ export function Profile({ isLogin, onNavigationOpen, onLogout, onUpdateUser }) {
                 type="email"
                 id="profileEmail"
                 name="email"
-                className={`profile__input profile__input_form_email ${
-                  canEdit ? "profile__input_edit" : ""
-                }`}
+                className={`${
+                  email.isDirty &&
+                  (email.isEmpty ||
+                    email.minLenghtError ||
+                    email.isEmailError) &&
+                  "validation__text_color"
+                } profile__input profile__input_form_email`}
                 minLength="2"
                 maxLength="40"
                 required
-                readOnly={!canEdit}
-                value={email}
-                onChange={handleChangeEmail}
-                placeholder="почта"
+                readOnly={isProfileForm}
+                value={email.value}
+                onChange={email.onChange}
+                onBlur={email.onBlur}
               />
-              <span className="profileEmail-error"></span>
             </fieldset>
+
+            <span
+              className={`${
+                (errorMessage || okMessage) &&
+                "validation__buttonError validation__text_color"
+              }`}
+            >
+              {errorMessage || okMessage}
+            </span>
             <button
               aria-label="submit"
-              className="profile__button"
+              className={`profile__button ${
+                (checkData() && !isProfileForm) && "validation__disabled"
+              }`}
               type="submit"
-              disabled={!(name && email)}
+              disabled={!isProfileForm && checkData()}
             >
-              {canEdit ? "Сохранить" : "Редактировать"}
+              {isProfileForm ? "Редактировать" : "Сохранить"}
             </button>
           </form>
           <div>

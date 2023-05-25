@@ -12,7 +12,6 @@
 }
 .register__button:hover {
   opacity: 0.8;
-  background: #3456F3;
   transition: 0.5s;
   cursor: pointer;
 }
